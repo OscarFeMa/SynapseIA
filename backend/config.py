@@ -35,8 +35,39 @@ class Settings(BaseSettings):
     HEARTBEAT_TIMEOUT: int = 15
     TCP_COMMAND_PORT: int = 54322
     
+    # ─── Seguridad ────────────────────────────────────────────
+    SYNAPSE_SECRET_TOKEN: str = Field(default="synapse_coral_2024")
+    
     # ─── Base de Datos ────────────────────────────────────────
     DATABASE_URL: str = "sqlite+aiosqlite:///./data/synapse.db"
+    
+    # ─── Supabase ─────────────────────────────────────────────
+    SUPABASE_URL: Optional[str] = None
+    SUPABASE_ANON_KEY: Optional[str] = None
+    SUPABASE_ENABLED: bool = Field(default=False)
+    
+    # ─── Redis ───────────────────────────────────────────────
+    REDIS_URL: str = Field(default="redis://localhost:6379")
+    REDIS_ENABLED: bool = Field(default=True)
+    
+    # ─── Worker Pool ───────────────────────────────────────────
+    WORKER_POOL_STRATEGY: str = Field(default="round_robin", pattern="^(round_robin|least_loaded|random|weighted)$")
+    WORKER_POOL_HEALTH_CHECK_INTERVAL: int = 30
+    
+    # ─── Monitoring ───────────────────────────────────────────
+    METRICS_ENABLED: bool = Field(default=True)
+    METRICS_PORT: int = 8001
+    
+    # ─── Cache ─────────────────────────────────────────────────
+    CACHE_TTL_DEFAULT: int = 3600  # 1 hora
+    CACHE_TTL_AGENT_RESPONSE: int = 7200  # 2 horas
+    CACHE_TTL_DEBATE_SUMMARY: int = 86400  # 24 horas
+    CACHE_TTL_WORKER_STATUS: int = 300  # 5 minutos
+    
+    # ─── Render Deployment ─────────────────────────────────────
+    RENDER_SERVICE_NAME: Optional[str] = None
+    RENDER_BRANCH: str = "main"
+    RENDER_ENVIRONMENT: str = "production"
     
     # ─── Ollama ───────────────────────────────────────────────
     OLLAMA_BASE_URL: str = "http://localhost:11434"

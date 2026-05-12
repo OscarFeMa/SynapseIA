@@ -1,0 +1,141 @@
+# Synapse Council - Render Deployment Configuration
+# Deploy Master API en Render con PostgreSQL y Redis
+
+services:
+  # ─── MASTER API SERVICE ─────────────────────────────────────
+  - type: web
+    name: synapse-master
+    env: web
+    plan: free
+    region: oregon
+    runtime: python
+    buildCommand: "pip install -r backend/requirements.txt && python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
+    startCommand: "python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    envVars:
+      # ─── Configuración básica ─────────────────────────────────
+      - key: NODE_ROLE
+        value: MASTER
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+      
+      # ─── Base de Datos PostgreSQL ───────────────────────────────
+      - key: DATABASE_URL
+        fromDatabase:
+          name: synapse-db
+          property: connectionString
+      - key: DATABASE_TYPE
+        value: postgresql
+      
+      # ─── Redis Cache ───────────────────────────────────────────
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: synapse-redis
+          property: connectionString
+      - key: REDIS_ENABLED
+        value: "true"
+      
+      # ─── Supabase (opcional) ─────────────────────────────────
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_ENABLED
+        value: "false"
+      
+      # ─── Monitoreo ─────────────────────────────────────────────
+      - key: METRICS_ENABLED
+        value: "true"
+      - key: METRICS_PORT
+        value: "8001"
+      
+      # ─── Seguridad ───────────────────────────────────────────────
+      - key: SYNAPSE_SECRET_TOKEN
+        generateValue: true
+        length: 32
+      
+      # ─── Worker Pool ───────────────────────────────────────────
+      - key: WORKER_POOL_STRATEGY
+        value: "least_loaded"
+      - key: WORKER_POOL_HEALTH_CHECK_INTERVAL
+        value: "30"
+      
+      # ─── Cache TTLs ───────────────────────────────────────────
+      - key: CACHE_TTL_DEFAULT
+        value: "3600"
+      - key: CACHE_TTL_AGENT_RESPONSE
+        value: "7200"
+      - key: CACHE_TTL_DEBATE_SUMMARY
+        value: "86400"
+      - key: CACHE_TTL_WORKER_STATUS
+        value: "300"
+
+  # ─── POSTGRESQL DATABASE ─────────────────────────────────────────
+  - type: pserv
+    name: synapse-db
+    plan: free
+    region: oregon
+    databaseName: synapse
+    user: synapse_user
+    ipAllowList: []  # Restringir a IPs específicas en producción
+    
+  # ─── REDIS CACHE ───────────────────────────────────────────────
+  - type: redis
+    name: synapse-redis
+    plan: free
+    region: oregon
+    ipAllowList: []  # Restringir a IPs específicas en producción
+    maxmemoryPolicy: allkeys-lru
+
+# ─── BUILD CONFIGURATION ───────────────────────────────────────────
+build:
+  dockerfilePath: ./Dockerfile.render
+  dockerContext: .
+
+# ─── DEPLOYMENT HOOKS ───────────────────────────────────────────
+preDeploy:
+  - echo "Starting deployment of Synapse Master API..."
+  - echo "Environment: $RENDER_ENVIRONMENT"
+  - echo "Branch: $RENDER_GIT_BRANCH"
+
+postDeploy:
+  - echo "Deployment completed successfully"
+  - echo "Running health check..."
+  - curl -f $RENDER_EXTERNAL_URL/health || exit 1
+
+# ─── AUTO-SCALING ───────────────────────────────────────────────────
+autoscaling:
+  enabled: false  # Habilitar en producción con carga alta
+  minInstances: 1
+  maxInstances: 3
+  targetCPUUtilization: 70
+  targetMemoryUtilization: 80
+
+# ─── NETWORKING ─────────────────────────────────────────────────────
+networking:
+  httpPort: 8000
+  httpsPort: 443
+  
+# ─── SECURITY ───────────────────────────────────────────────────────
+security:
+  enableRequestLogging: true
+  allowedMethods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  allowedOrigins:
+    - https://synapse-dashboard.onrender.com
+    - http://localhost:3000
+    - http://localhost:8000
+  
+# ─── MONITORING ───────────────────────────────────────────────────
+monitoring:
+  enabled: true
+  healthCheckInterval: 30
+  healthCheckTimeout: 10
+  healthCheckRetries: 3

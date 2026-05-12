@@ -95,7 +95,7 @@ async def lifespan(app: FastAPI):
             interval=settings.HEARTBEAT_INTERVAL,
             timeout=settings.HEARTBEAT_TIMEOUT
         )
-        heartbeat_manager.start()
+        await heartbeat_manager.start()
         logger.info("heartbeat.started", role="MASTER")
     else:
         # Worker inicia heartbeat cuando conoce la IP del Master
@@ -113,7 +113,7 @@ async def lifespan(app: FastAPI):
     
     # Detener heartbeat
     if heartbeat_manager:
-        heartbeat_manager.stop()
+        await heartbeat_manager.stop()
         logger.info("heartbeat.stopped")
     
     # Cerrar TCP handshake

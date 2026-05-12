@@ -1,0 +1,29 @@
+{
+  "results": [
+    {
+      "test": "Discovery",
+      "status": "WARN",
+      "worker_ip": "192.168.1.38",
+      "note": "via DNS, no UDP beacon"
+    },
+    {
+      "test": "Heartbeat",
+      "status": "WARN",
+      "note": "Worker no envi\u00f3 heartbeat en 10s"
+    },
+    {
+      "test": "Worker Generation",
+      "status": "PASS",
+      "model": "mistral:7b",
+      "response": " OK",
+      "duration": 11.157725811004639
+    },
+    {
+      "test": "Circuit Worker",
+      "status": "PASS",
+      "failures": 0,
+      "broken": 0.0
+    }
+  ],
+  "timestamp": "2026-05-10T19:21:23.662131"
+}

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SynapseIA Dashboard</title>
+  <meta name="description" content="SynapseIA - Sistema de Conciencia Colectiva" />
+  
+  <!-- Cache Control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Estilos Personalizados -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .glass {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+      background: rgba(55, 65, 81, 0.8);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      cursor: pointer;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(59, 130, 246, 0.9);
+      transform: translateY(-1px);
+    }
+    
+    .stat-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading">
+    <div style="text-align: center;">
+      <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem;" class="text-gradient">
+        SynapseIA
+      </h1>
+      <p style="font-size: 1.2rem; color: #9ca3af; margin-bottom: 2rem;">
+        Conectando con la red neuronal...
+      </p>
+      <div style="width: 60px; height: 60px; border: 3px solid #3b82f6; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" style="display: none;">
+    <!-- Header -->
+    <header style="background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem 0;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="font-size: 1.5rem; font-weight: 800;" class="text-gradient">🧠 SynapseIA</div>
+          <div style="font-size: 0.9rem; color: #9ca3af; font-style: italic;">Conectando Mentes, Amplificando Inteligencia</div>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <select id="theme-selector" name="theme-selector" style="background: rgba(31, 41, 55, 0.8); color: #e2e8f0; border: 1px solid rgba(59, 130, 246, 0.3); padding: 8px 12px; border-radius: 6px; font-size: 0.9rem;">
+            <option value="neural_network">🧠 Red Neuronal</option>
+            <option value="quantum_realm">⚛️ Reino Cuántico</option>
+            <option value="cosmic_consciousness">🌌 Conciencia Cósmica</option>
+            <option value="digital_synapse">💻 Sinapsis Digital</option>
+          </select>
+          
+          <select id="dark-mode-selector" name="dark-mode-selector" style="background: rgba(31, 41, 55, 0.8); color: #e2e8f0; border: 1px solid rgba(59, 130, 246, 0.3); padding: 8px 12px; border-radius: 6px; font-size: 0.9rem;">
+            <option value="dark">🌞 Dark</option>
+            <option value="light">🌞 Light</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+      <!-- Stats Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div class="stat-card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧠</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">42</div>
+          <div style="font-size: 0.9rem; color: #9ca3af;">Debates Totales</div>
+        </div>
+        
+        <div class="stat-card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #8b5cf6;">8</div>
+          <div style="font-size: 0.9rem; color: #9ca3af;">Debates Activos</div>
+        </div>
+        
+        <div class="stat-card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">12</div>
+          <div style="font-size: 0.9rem; color: #9ca3af;">Workers Conectados</div>
+        </div>
+        
+        <div class="stat-card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #059669;">94.2%</div>
+          <div style="font-size: 0.9rem; color: #9ca3af;">Tasa de Éxito</div>
+        </div>
+        
+        <div class="stat-card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏱️</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">2.3s</div>
+          <div style="font-size: 0.9rem; color: #9ca3af;">Tiempo Promedio</div>
+        </div>
+        
+        <div class="stat-card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌌</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #8b5cf6;">78%</div>
+          <div style="font-size: 0.9rem; color: #9ca3af;">Nivel de Conciencia</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <button class="btn-primary" onclick="window.location.href='debates.html'">
+          🧠 Iniciar Nuevo Debate
+        </button>
+        
+        <button class="btn-primary" onclick="window.location.href='workers.html'">
+          🔗 Gestionar Workers
+        </button>
+        
+        <button class="btn-primary" onclick="window.location.href='metrics.html'">
+          📊 Ver Métricas
+        </button>
+        
+        <button class="btn-primary" onclick="window.location.href='settings.html'">
+          ⚙️ Configuración
+        </button>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+        <div class="glass">
+          <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Acciones Rápidas</h3>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <button class="btn-secondary" onclick="refreshData()">
+              🔄 Sincronizar Datos
+            </button>
+            <button class="btn-secondary" onclick="forceReload()" style="background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);">
+              🔄 Forzar Recarga Completa
+            </button>
+          </div>
+        </div>
+        
+        <div class="glass">
+          <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Estado del Sistema</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🌐</div>
+              <div style="font-size: 1rem; color: #10b981;">API Online</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💾</div>
+              <div style="font-size: 1rem; color: #059669;">Cache Activo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Debates Table -->
+      <div class="glass">
+        <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Debates Recientes</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: rgba(59, 130, 246, 0.2);">
+                <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Tema</th>
+                <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Estado</th>
+                <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Modo</th>
+                <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Duración</th>
+                <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="debates-table-body">
+              <!-- Los datos se cargarán dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Datos simulados
+    const mockDebates = [
+      {
+        id: 'debate-1',
+        topic: 'El futuro de la IA en la toma de decisiones',
+        status: 'completed',
+        mode: 'standard',
+        duration: '2.5 min',
+        participants: 4,
+        consensus_score: 85,
+        timestamp: new Date().toISOString()
+      },
+      {
+        id: 'debate-2',
+        topic: 'Ética en el desarrollo de sistemas autónomos',
+        status: 'running',
+        mode: 'consensus',
+        duration: '1.2 min',
+        participants: 6,
+        consensus_score: 72,
+        timestamp: new Date().toISOString()
+      },
+      {
+        id: 'debate-3',
+        topic: 'Impacto del razonamiento colaborativo',
+        status: 'completed',
+        mode: 'sequential',
+        duration: '3.8 min',
+        participants: 5,
+        consensus_score: 91,
+        timestamp: new Date().toISOString()
+      }
+    ];
+
+    // Cargar debates en la tabla
+    function loadDebates() {
+      const tbody = document.getElementById('debates-table-body');
+      tbody.innerHTML = '';
+      
+      mockDebates.forEach(debate => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid rgba(59, 130, 246, 0.1)';
+        row.innerHTML = `
+          <td style="padding: 12px; font-size: 0.9rem;">${debate.topic}</td>
+          <td style="padding: 12px;">
+            <span style="
+              padding: 4px 8px; 
+              border-radius: 12px; 
+              font-size: 0.8rem; 
+              font-weight: 500;
+              ${debate.status === 'completed' ? 'background: rgba(16, 185, 129, 0.2); color: #10b981;' :
+                debate.status === 'running' ? 'background: rgba(59, 130, 246, 0.2); color: #3b82f6;' :
+                'background: rgba(239, 68, 68, 0.2); color: #dc2626;'}
+            ">
+              ${debate.status === 'completed' ? '✅ Completado' :
+                debate.status === 'running' ? '⚡ Activo' :
+                '❌ Fallido'}
+            </span>
+          </td>
+          <td style="padding: 12px;">
+            <span style="color: #8b5cf6; font-weight: 500;">
+              ${debate.mode === 'standard' ? '🧠 Estándar' :
+                debate.mode === 'consensus' ? '🤝 Consenso' :
+                '🔄 Secuencial'}
+            </span>
+          </td>
+          <td style="padding: 12px; color: #9ca3af;">${debate.duration}</td>
+          <td style="padding: 12px;">
+            <button onclick="viewDebate('${debate.id}')" style="
+              background: #3b82f6; 
+              color: white; 
+              padding: 6px 12px; 
+              border-radius: 6px; 
+              border: none; 
+              cursor: pointer; 
+              font-size: 0.8rem;
+              transition: all 0.3s ease;
+            " onmouseover="this.style.background='#8b5cf6'" onmouseout="this.style.background='#3b82f6'">
+              Ver →
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Funciones de acción
+    function refreshData() {
+      console.log('🔄 Sincronizando datos...');
+      loadDebates();
+      // Aquí se conectaría con la API real
+    }
+
+    function forceReload() {
+      console.log('🔄 Forzando recarga completa...');
+      localStorage.clear();
+      sessionStorage.clear();
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          names.forEach(name => {
+            caches.delete(name);
+          });
+        });
+      }
+      const timestamp = new Date().getTime();
+      window.location.href = window.location.href.split('?')[0] + '?force_reload=' + timestamp;
+    }
+
+    function viewDebate(id) {
+      console.log('📊 Ver debate:', id);
+      // Aquí navegaría a la página de detalles del debate
+    }
+
+    // Animación de loading
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        const app = document.getElementById('app');
+        
+        if (loadingScreen && app) {
+          loadingScreen.style.display = 'none';
+          app.style.display = 'block';
+          loadDebates();
+        }
+      }, 2000);
+    });
+
+    // Actualizar datos cada 30 segundos
+    setInterval(() => {
+      loadDebates();
+    }, 30000);
+  </script>
+</body>
+</html>

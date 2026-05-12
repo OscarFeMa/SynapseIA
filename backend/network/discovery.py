@@ -11,6 +11,7 @@ import platform
 from typing import Dict, Any, Optional, List
 import structlog
 from backend.config import get_settings
+from backend.services.worker_starter import get_worker_starter
 
 logger = structlog.get_logger()
 settings = get_settings()
@@ -78,9 +79,13 @@ class NodeDiscoverer:
             logger.info("network.peer_discovered", node_id=node_id, role=node_role, ip=sender_ip)
             
             # Si somos MASTER y encontramos un WORKER, actualizamos la configuración
+            # e intentamos iniciar su backend automáticamente
             if settings.is_master and node_role == "WORKER":
                 logger.info("network.worker_linked", ip=sender_ip)
                 settings.update_worker_host(sender_ip)
+                
+                # Iniciar backend del Worker en background (no bloquear discovery)
+                asyncio.create_task(self._auto_start_worker(sender_ip))
 
     def _get_broadcast_addresses(self) -> List[str]:
         """Obtiene todas las direcciones de broadcast posibles"""
@@ -97,8 +102,8 @@ class NodeDiscoverer:
                 subnet_broadcast = f"{ip_parts[0]}.{ip_parts[1]}.{ip_parts[2]}.255"
                 if subnet_broadcast not in addresses:
                     addresses.append(subnet_broadcast)
-        except:
-            pass
+        except Exception as e:
+            logger.debug("discovery.get_broadcast_addresses_error", error=str(e))
             
         return addresses
     
@@ -117,8 +122,8 @@ class NodeDiscoverer:
             try:
                 # Timeout para no bloquear indefinidamente
                 sock.settimeout(1.0)
-            except:
-                pass
+            except Exception as e:
+                logger.debug("discovery.socket_timeout_error", error=str(e))
         
         broadcast_addrs = self._get_broadcast_addresses()
         logger.info("network.broadcast_addresses", addresses=broadcast_addrs)
@@ -253,6 +258,35 @@ class NodeDiscoverer:
             }
             for pid, peer in self.peers.items()
         ]
+    
+    async def _auto_start_worker(self, worker_ip: str):
+        """Inicia automáticamente el backend del Worker tras detectarlo."""
+        try:
+            starter = get_worker_starter()
+            logger.info("discovery.auto_start_worker", worker_ip=worker_ip)
+            
+            result = await starter.start_worker(worker_ip)
+            
+            if result.success:
+                logger.info("discovery.worker_started", 
+                           worker_ip=worker_ip, 
+                           method=result.method,
+                           message=result.message)
+                
+                # Esperar a que esté listo
+                ready = await starter.wait_for_worker_ready(worker_ip, timeout=60)
+                if ready:
+                    logger.info("discovery.worker_ready", worker_ip=worker_ip)
+                else:
+                    logger.warning("discovery.worker_not_ready", worker_ip=worker_ip)
+            else:
+                logger.warning("discovery.worker_start_failed", 
+                             worker_ip=worker_ip,
+                             method=result.method,
+                             message=result.message)
+        
+        except Exception as e:
+            logger.error("discovery.auto_start_error", worker_ip=worker_ip, error=str(e))
 
 # Singleton instance
 node_discoverer = NodeDiscoverer()

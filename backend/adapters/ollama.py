@@ -4,6 +4,7 @@ Cliente async para Ollama API (usa formato nativo, no OpenAI-compatible)
 """
 import json
 import httpx
+import asyncio
 from typing import Dict, Any, Optional, AsyncGenerator
 from backend.config import get_settings
 import structlog
@@ -162,33 +163,71 @@ class OllamaClient:
         client = self.client
         try:
             logger.info("ollama.generate.sending_request", url=f"{self.base_url}/api/generate", payload_keys=list(payload.keys()))
+            
+            # Usar timeout explícito para evitar bloqueos indefinidos
+            stream_timeout = max(30.0, self.timeout)  # Mínimo 30 segundos
+            
             async with client.stream(
                 "POST",
                 f"{self.base_url}/api/generate",
                 json=payload,
-                headers={"Content-Type": "application/json"}
+                headers={"Content-Type": "application/json"},
+                timeout=httpx.Timeout(stream_timeout, read=stream_timeout)
             ) as response:
                 logger.info("ollama.generate.response_started", status_code=response.status_code)
+                
+                if response.status_code != 200:
+                    error_text = await response.aread()
+                    logger.error("ollama.generate.http_error", status_code=response.status_code, error=error_text[:200])
+                    raise RuntimeError(f"Ollama HTTP {response.status_code}: {error_text[:200]}")
+                
                 if stream:
                     token_count = 0
                     line_count = 0
-                    async for line in response.aiter_lines():
-                        line_count += 1
-                        logger.info("ollama.generate.line_received", line_num=line_count, line_length=len(line), line_preview=line[:100] if line else "EMPTY")
-                        if line:
-                            try:
-                                data = json.loads(line)
-                                logger.info("ollama.generate.line_parsed", line_num=line_count, has_response="response" in data, done=data.get("done", False), response_preview=data.get("response", "")[:50] if "response" in data else "")
-                                if "response" in data:
-                                    token_count += 1
-                                    yield data["response"]
-                                if data.get("done", False):
-                                    logger.info("ollama.generate.done", tokens_yielded=token_count, total_lines=line_count)
-                                    break
-                            except json.JSONDecodeError as e:
-                                logger.warning("ollama.generate.json_decode_error", line=line[:100], error=str(e))
-                                continue
-                    logger.info("ollama.generate.stream_completed", total_tokens=token_count, total_lines=line_count)
+                    last_token_time = asyncio.get_event_loop().time()
+                    
+                    try:
+                        async for line in response.aiter_lines():
+                            line_count += 1
+                            current_time = asyncio.get_event_loop().time()
+                            
+                            # Log cada 10 líneas para reducir verbosidad
+                            if line_count % 10 == 0:
+                                logger.debug("ollama.generate.progress", line_num=line_count, tokens=token_count)
+                            
+                            if line:
+                                try:
+                                    data = json.loads(line)
+                                    
+                                    if "response" in data:
+                                        token_count += 1
+                                        last_token_time = current_time
+                                        yield data["response"]
+                                    
+                                    if data.get("done", False):
+                                        logger.info("ollama.generate.done", tokens_yielded=token_count, total_lines=line_count)
+                                        break
+                                    
+                                    # Timeout por inactividad (sin tokens por 60s)
+                                    if current_time - last_token_time > 60:
+                                        logger.warning("ollama.generate.inactivity_timeout", elapsed=current_time - last_token_time)
+                                        break
+                                        
+                                except json.JSONDecodeError as e:
+                                    logger.debug("ollama.generate.json_decode_error", line=line[:50], error=str(e))
+                                    continue
+                        
+                        logger.info("ollama.generate.stream_completed", total_tokens=token_count, total_lines=line_count)
+                    
+                    except asyncio.TimeoutError:
+                        logger.warning("ollama.generate.stream_timeout", timeout=stream_timeout)
+                        raise
+                    
+                    finally:
+                        # Forzar cierre del stream para evitar dejar la conexión abierta
+                        await response.aclose()
+                        logger.debug("ollama.generate.stream_closed")
+                
                 else:
                     text = ""
                     async for line in response.aiter_lines():
@@ -202,9 +241,14 @@ class OllamaClient:
                             except json.JSONDecodeError:
                                 continue
                     yield text
+        
+        except httpx.TimeoutException as e:
+            logger.error("ollama.generate.timeout", error=str(e), timeout=stream_timeout)
+            raise asyncio.TimeoutError(f"Ollama timeout después de {stream_timeout}s")
+        
         except Exception as e:
             logger.error("ollama.generate.exception", error=str(e), error_type=type(e).__name__)
-            raise e
+            raise
     
     async def chat(
         self,

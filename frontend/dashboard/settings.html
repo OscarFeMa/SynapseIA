@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuración - SynapseIA Dashboard</title>
+  <meta name="description" content="SynapseIA - Configuración del Sistema" />
+  
+  <!-- Cache Control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Estilos Personalizados -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .glass {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+      background: rgba(55, 65, 81, 0.8);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      cursor: pointer;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(59, 130, 246, 0.9);
+      transform: translateY(-1px);
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header style="background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 1rem;">
+          <div style="font-size: 1.5rem; font-weight: 800;" class="text-gradient">🧠 SynapseIA</div>
+          <div style="font-size: 0.9rem; color: #9ca3af; font-style: italic;">Conectando Mentes, Amplificando Inteligencia</div>
+        </a>
+      </div>
+      
+      <nav style="display: flex; align-items: center; gap: 1rem;">
+        <a href="index.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">📊 Dashboard</a>
+        <a href="debates.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">🧠 Debates</a>
+        <a href="workers.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">🔗 Workers</a>
+        <a href="metrics.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">📊 Métricas</a>
+        <a href="settings.html" style="color: #3b82f6; text-decoration: none; padding: 8px 16px; border-radius: 6px; background: rgba(59, 130, 246, 0.1);">⚙️ Configuración</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem;" class="text-gradient">
+        ⚙️ Configuración
+      </h1>
+      <p style="font-size: 1.2rem; color: #9ca3af;">
+        Personaliza tu experiencia de SynapseIA
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <!-- Appearance Settings -->
+      <div class="glass">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; color: #e2e8f0;">Apariencia</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <!-- Theme Selection -->
+          <div>
+            <label style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 0.5rem;">Tema Visual</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <button onclick="selectTheme('neural_network')" style="
+                padding: 1rem; 
+                border-radius: 8px; 
+                border: 2px solid rgba(59, 130, 246, 0.3); 
+                background: rgba(31, 41, 55, 0.8); 
+                color: #e2e8f0; 
+                cursor: pointer; 
+                transition: all 0.3s ease;
+                text-align: left;
+              " onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='rgba(59, 130, 246, 0.3)'">
+                <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🧠</div>
+                <div style="font-size: 0.8rem; font-weight: 500;">Red Neuronal</div>
+                <div style="font-size: 0.7rem; color: #9ca3af;">Conexiones sinápticas</div>
+              </button>
+              
+              <button onclick="selectTheme('quantum_realm')" style="
+                padding: 1rem; 
+                border-radius: 8px; 
+                border: 2px solid rgba(59, 130, 246, 0.3); 
+                background: rgba(31, 41, 55, 0.8); 
+                color: #e2e8f0; 
+                cursor: pointer; 
+                transition: all 0.3s ease;
+                text-align: left;
+              " onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='rgba(59, 130, 246, 0.3)'">
+                <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">⚛️</div>
+                <div style="font-size: 0.8rem; font-weight: 500;">Reino Cuántico</div>
+                <div style="font-size: 0.7rem; color: #9ca3af;">Estados superpuestos</div>
+              </button>
+              
+              <button onclick="selectTheme('cosmic_consciousness')" style="
+                padding: 1rem; 
+                border-radius: 8px; 
+                border: 2px solid rgba(59, 130, 246, 0.3); 
+                background: rgba(31, 41, 55, 0.8); 
+                color: #e2e8f0; 
+                cursor: pointer; 
+                transition: all 0.3s ease;
+                text-align: left;
+              " onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='rgba(59, 130, 246, 0.3)'">
+                <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🌌</div>
+                <div style="font-size: 0.8rem; font-weight: 500;">Conciencia Cósmica</div>
+                <div style="font-size: 0.7rem; color: #9ca3af;">Red universal</div>
+              </button>
+              
+              <button onclick="selectTheme('digital_synapse')" style="
+                padding: 1rem; 
+                border-radius: 8px; 
+                border: 2px solid rgba(59, 130, 246, 0.3); 
+                background: rgba(31, 41, 55, 0.8); 
+                color: #e2e8f0; 
+                cursor: pointer; 
+                transition: all 0.3s ease;
+                text-align: left;
+              " onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='rgba(59, 130, 246, 0.3)'">
+                <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">💻</div>
+                <div style="font-size: 0.8rem; font-weight: 500;">Sinapsis Digital</div>
+                <div style="font-size: 0.7rem; color: #9ca3af;">Código puro</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dark Mode -->
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <label style="font-size: 0.9rem; font-weight: 500; color: #e2e8f0;">Modo Oscuro</label>
+              <p style="font-size: 0.7rem; color: #9ca3af;">Interfaz nocturna</p>
+            </div>
+            <button onclick="toggleDarkMode()" style="
+              position: relative; 
+              width: 3rem; 
+              height: 1.5rem; 
+              background: #6b7280; 
+              border-radius: 9999px; 
+              border: none; 
+              cursor: pointer; 
+              transition: all 0.3s ease;
+            ">
+              <span id="dark-mode-toggle" style="
+                position: absolute; 
+                top: 2px; 
+                left: 2px; 
+                width: 1.25rem; 
+                height: 1.25rem; 
+                background: white; 
+                border-radius: 50%; 
+                transition: all 0.3s ease;
+              "></span>
+            </button>
+          </div>
+
+          <!-- Language -->
+          <div>
+            <label style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 0.5rem;">Idioma</label>
+            <select id="language-select" name="language-select" style="
+              width: 100%; 
+              background: rgba(31, 41, 55, 0.8); 
+              color: #e2e8f0; 
+              border: 1px solid rgba(59, 130, 246, 0.3); 
+              padding: 0.75rem; 
+              border-radius: 6px; 
+              font-size: 0.9rem;
+            ">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Settings -->
+      <div class="glass">
+        <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; color: #e2e8f0;">Sistema</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <!-- Refresh Interval -->
+          <div>
+            <label style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 0.5rem;">
+              Intervalo de Refresh (segundos)
+            </label>
+            <input 
+              type="range" 
+              id="refresh-interval" 
+              name="refresh-interval"
+              min="1" 
+              max="60" 
+              value="5" 
+              style="width: 100%; margin-bottom: 0.5rem;"
+              oninput="document.getElementById('refresh-value').textContent = this.value + 's'"
+            />
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #9ca3af;">
+              <span>1s</span>
+              <span id="refresh-value">5s</span>
+              <span>60s</span>
+            </div>
+          </div>
+
+          <!-- Max Debates -->
+          <div>
+            <label style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 0.5rem;">
+              Máximo de Debates Concurrentes
+            </label>
+            <input 
+              type="number" 
+              id="max-debates" 
+              name="max-debates"
+              min="1" 
+              max="100" 
+              value="10" 
+              style="
+                width: 100%; 
+                background: rgba(31, 41, 55, 0.8); 
+                color: #e2e8f0; 
+                border: 1px solid rgba(59, 130, 246, 0.3); 
+                padding: 0.75rem; 
+                border-radius: 6px; 
+                font-size: 0.9rem;
+              "
+            />
+          </div>
+
+          <!-- Worker Pool Strategy -->
+          <div>
+            <label style="display: block; font-size: 0.9rem; font-weight: 500; color: #e2e8f0; margin-bottom: 0.5rem;">
+              Estrategia de Worker Pool
+            </label>
+            <select id="worker-pool-strategy" name="worker-pool-strategy" style="
+              width: 100%; 
+              background: rgba(31, 41, 55, 0.8); 
+              color: #e2e8f0; 
+              border: 1px solid rgba(59, 130, 246, 0.3); 
+              padding: 0.75rem; 
+              border-radius: 6px; 
+              font-size: 0.9rem;
+            ">
+              <option value="round_robin">Round Robin - Distribución equitativa</option>
+              <option value="least_loaded">Least Loaded - Menor carga primero</option>
+              <option value="random">Random - Selección aleatoria</option>
+              <option value="weighted">Weighted - Basado en rendimiento</option>
+            </select>
+          </div>
+
+          <!-- Cache Settings -->
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <label style="font-size: 0.9rem; font-weight: 500; color: #e2e8f0;">Cache Habilitado</label>
+              <p style="font-size: 0.7rem; color: #9ca3af;">Almacenamiento temporal</p>
+            </div>
+            <button onclick="toggleCache()" style="
+              position: relative; 
+              width: 3rem; 
+              height: 1.5rem; 
+              background: #3b82f6; 
+              border-radius: 9999px; 
+              border: none; 
+              cursor: pointer; 
+              transition: all 0.3s ease;
+            ">
+              <span id="cache-toggle" style="
+                position: absolute; 
+                top: 2px; 
+                right: 2px; 
+                width: 1.25rem; 
+                height: 1.25rem; 
+                background: white; 
+                border-radius: 50%; 
+                transition: all 0.3s ease;
+              "></span>
+            </button>
+          </div>
+
+          <!-- Monitoring -->
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <label style="font-size: 0.9rem; font-weight: 500; color: #e2e8f0;">Monitoreo Habilitado</label>
+              <p style="font-size: 0.7rem; color: #9ca3af;">Seguimiento en tiempo real</p>
+            </div>
+            <button onclick="toggleMonitoring()" style="
+              position: relative; 
+              width: 3rem; 
+              height: 1.5rem; 
+              background: #3b82f6; 
+              border-radius: 9999px; 
+              border: none; 
+              cursor: pointer; 
+              transition: all 0.3s ease;
+            ">
+              <span id="monitoring-toggle" style="
+                position: absolute; 
+                top: 2px; 
+                right: 2px; 
+                width: 1.25rem; 
+                height: 1.25rem; 
+                background: white; 
+                border-radius: 50%; 
+                transition: all 0.3s ease;
+              "></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem;">
+      <button class="btn-primary" onclick="saveSettings()">
+        💾 Guardar Configuración
+      </button>
+      
+      <button class="btn-primary" onclick="resetSettings()">
+        🔄 Restablecer Valores
+      </button>
+      
+      <button class="btn-secondary" onclick="exportConfig()">
+        📤 Exportar Configuración
+      </button>
+      
+      <button class="btn-secondary" onclick="importConfig()">
+        📥 Importar Configuración
+      </button>
+    </div>
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    // Estado actual de configuración
+    let currentSettings = {
+      theme: 'neural_network',
+      darkMode: true,
+      language: 'es',
+      refreshInterval: 5,
+      maxDebates: 10,
+      workerPoolStrategy: 'least_loaded',
+      cacheEnabled: true,
+      monitoringEnabled: true
+    };
+
+    // Funciones de configuración
+    function selectTheme(theme) {
+      currentSettings.theme = theme;
+      console.log('🎨 Tema seleccionado:', theme);
+      // Aquí se aplicaría el tema visual
+    }
+
+    function toggleDarkMode() {
+      currentSettings.darkMode = !currentSettings.darkMode;
+      const toggle = document.getElementById('dark-mode-toggle');
+      
+      if (currentSettings.darkMode) {
+        toggle.style.transform = 'translateX(1.5rem)';
+        toggle.parentElement.style.background = '#3b82f6';
+      } else {
+        toggle.style.transform = 'translateX(0)';
+        toggle.parentElement.style.background = '#6b7280';
+      }
+      
+      console.log('🌞 Modo oscuro:', currentSettings.darkMode ? 'Activado' : 'Desactivado');
+    }
+
+    function toggleCache() {
+      currentSettings.cacheEnabled = !currentSettings.cacheEnabled;
+      const toggle = document.getElementById('cache-toggle');
+      
+      if (currentSettings.cacheEnabled) {
+        toggle.style.transform = 'translateX(0)';
+        toggle.parentElement.style.background = '#6b7280';
+      } else {
+        toggle.style.transform = 'translateX(-1.5rem)';
+        toggle.parentElement.style.background = '#3b82f6';
+      }
+      
+      console.log('💾 Cache:', currentSettings.cacheEnabled ? 'Activado' : 'Desactivado');
+    }
+
+    function toggleMonitoring() {
+      currentSettings.monitoringEnabled = !currentSettings.monitoringEnabled;
+      const toggle = document.getElementById('monitoring-toggle');
+      
+      if (currentSettings.monitoringEnabled) {
+        toggle.style.transform = 'translateX(0)';
+        toggle.parentElement.style.background = '#6b7280';
+      } else {
+        toggle.style.transform = 'translateX(-1.5rem)';
+        toggle.parentElement.style.background = '#3b82f6';
+      }
+      
+      console.log('📊 Monitoreo:', currentSettings.monitoringEnabled ? 'Activado' : 'Desactivado');
+    }
+
+    function saveSettings() {
+      // Recopilar valores de los formularios
+      currentSettings.language = document.getElementById('language-select').value;
+      currentSettings.refreshInterval = parseInt(document.getElementById('refresh-interval').value);
+      currentSettings.maxDebates = parseInt(document.getElementById('max-debates').value);
+      currentSettings.workerPoolStrategy = document.getElementById('worker-pool-strategy').value;
+      
+      console.log('💾 Guardando configuración:', currentSettings);
+      // Aquí se guardaría la configuración en localStorage o backend
+      
+      // Mostrar confirmación
+      alert('Configuración guardada exitosamente');
+    }
+
+    function resetSettings() {
+      if (confirm('¿Estás seguro de que deseas restablecer la configuración a los valores predeterminados?')) {
+        console.log('🔄 Restableciendo configuración...');
+        // Restablecer valores predeterminados
+        document.getElementById('language-select').value = 'es';
+        document.getElementById('refresh-interval').value = 5;
+        document.getElementById('refresh-value').textContent = '5s';
+        document.getElementById('max-debates').value = 10;
+        document.getElementById('worker-pool-strategy').value = 'least_loaded';
+        
+        // Restablecer toggles
+        currentSettings = {
+          theme: 'neural_network',
+          darkMode: true,
+          language: 'es',
+          refreshInterval: 5,
+          maxDebates: 10,
+          workerPoolStrategy: 'least_loaded',
+          cacheEnabled: true,
+          monitoringEnabled: true
+        };
+        
+        toggleDarkMode();
+        toggleCache();
+        toggleMonitoring();
+        
+        alert('Configuración restablecida exitosamente');
+      }
+    }
+
+    function exportConfig() {
+      console.log('📤 Exportando configuración...');
+      const configData = JSON.stringify(currentSettings, null, 2);
+      const blob = new Blob([configData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'synapseia-config.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importConfig() {
+      console.log('📥 Importando configuración...');
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            try {
+              const importedSettings = JSON.parse(e.target.result);
+              currentSettings = { ...currentSettings, ...importedSettings };
+              
+              // Actualizar UI con valores importados
+              document.getElementById('language-select').value = currentSettings.language;
+              document.getElementById('refresh-interval').value = currentSettings.refreshInterval;
+              document.getElementById('refresh-value').textContent = currentSettings.refreshInterval + 's';
+              document.getElementById('max-debates').value = currentSettings.maxDebates;
+              document.getElementById('worker-pool-strategy').value = currentSettings.workerPoolStrategy;
+              
+              alert('Configuración importada exitosamente');
+            } catch (error) {
+              alert('Error al importar configuración: ' + error.message);
+            }
+          };
+          reader.readAsText(file);
+        }
+      };
+      input.click();
+    }
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+      // Establecer estado inicial de los toggles
+      if (currentSettings.darkMode) {
+        document.getElementById('dark-mode-toggle').style.transform = 'translateX(1.5rem)';
+        document.getElementById('dark-mode-toggle').parentElement.style.background = '#3b82f6';
+      }
+      
+      if (currentSettings.cacheEnabled) {
+        document.getElementById('cache-toggle').style.transform = 'translateX(0)';
+        document.getElementById('cache-toggle').parentElement.style.background = '#6b7280';
+      }
+      
+      if (currentSettings.monitoringEnabled) {
+        document.getElementById('monitoring-toggle').style.transform = 'translateX(0)';
+        document.getElementById('monitoring-toggle').parentElement.style.background = '#6b7280';
+      }
+    });
+  </script>
+</body>
+</html>

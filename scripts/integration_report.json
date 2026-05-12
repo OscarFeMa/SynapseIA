@@ -1,0 +1,37 @@
+{
+  "sqlite": {
+    "status": "OK",
+    "message": "Conexión funcional"
+  },
+  "config": {
+    "status": "OK",
+    "message": "Configuración cargada",
+    "checks": {
+      "NODE_ROLE": "MASTER",
+      "DATABASE_URL": "sqlite+aiosqlite:///./data/syn...",
+      "OLLAMA_BASE_URL": "http://localhost:11434",
+      "SYNAPSE_SECRET_TOKEN": "synapse_co..."
+    }
+  },
+  "docker": {
+    "status": "OK",
+    "message": "Configuración completa"
+  },
+  "frontend": {
+    "status": "OK",
+    "message": "Frontend presente"
+  },
+  "tests": {
+    "status": "OK",
+    "message": "6 tests encontrados",
+    "count": 6
+  },
+  "redis": {
+    "status": "OK",
+    "message": "Configurado en docker-compose"
+  },
+  "supabase": {
+    "status": "WARN",
+    "message": "Documentación presente, código pendiente"
+  }
+}

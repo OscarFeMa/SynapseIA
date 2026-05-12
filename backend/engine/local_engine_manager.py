@@ -86,12 +86,16 @@ class LocalEngineManager:
             return {"status": "error", "error": str(e)}
             
     def _record_failure(self, engine_type: EngineType):
-        """Registra fallo y abre el circuito si es necesario"""
+        """Registra fallo y abre el circuito si es necesario.
+        
+        Umbral: 10 fallos consecutivos
+        Cooldown: 30 segundos
+        """
         import time
         self.engine_failures[engine_type] += 1
-        if self.engine_failures[engine_type] >= 3:
-            logger.warning(f"circuit_breaker_opened", engine=engine_type.value, duration=60)
-            self.circuit_broken_until[engine_type] = time.time() + 60.0
+        if self.engine_failures[engine_type] >= 10:
+            logger.warning("circuit_breaker_opened", engine=engine_type.value, failures=self.engine_failures[engine_type], duration=30)
+            self.circuit_broken_until[engine_type] = time.time() + 30.0
             self.engine_failures[engine_type] = 0  # Reset for next time
     
     async def check_all_health(self) -> Dict[EngineType, Dict[str, Any]]:

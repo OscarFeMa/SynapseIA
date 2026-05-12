@@ -7,22 +7,25 @@ import json
 import logging
 from typing import Optional, Dict, Any
 
+from backend.config import get_settings
+
 logger = logging.getLogger(__name__)
+settings = get_settings()
 
 
 class TCPHandshake:
     """Gestor de handshake TCP para conexión Master-Worker."""
     
-    def __init__(self, role: str, secret_token: str = "synapse_coral_2024"):
+    def __init__(self, role: str, secret_token: Optional[str] = None):
         """
         Inicializa el gestor de handshake.
         
         Args:
             role: 'MASTER' o 'WORKER'
-            secret_token: Token secreto para autenticación
+            secret_token: Token secreto para autenticación (usa env var SYNAPSE_SECRET_TOKEN si no se proporciona)
         """
         self.role = role
-        self.secret_token = secret_token
+        self.secret_token = secret_token or settings.SYNAPSE_SECRET_TOKEN
         self.tcp_socket: Optional[socket.socket] = None
         self.peer_info: Optional[Dict[str, Any]] = None
     
@@ -188,7 +191,8 @@ class TCPHandshake:
             local_ip = s.getsockname()[0]
             s.close()
             return local_ip
-        except:
+        except Exception as e:
+            logger.warning("tcp_handshake.get_local_ip_failed", error=str(e))
             return "127.0.0.1"
     
     def is_connected(self) -> bool:

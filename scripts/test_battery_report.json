@@ -1,0 +1,286 @@
+{
+  "summary": {
+    "total_tests": 18,
+    "passed": 15,
+    "failed": 2,
+    "skipped": 0,
+    "errors": 1,
+    "warnings": 0,
+    "success_rate": 83.3,
+    "total_duration_sec": 21.37
+  },
+  "by_category": {
+    "CONNECTIVITY": {
+      "total": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "DATABASE": {
+      "total": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "CONFIG": {
+      "total": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "ENGINE": {
+      "total": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    "NETWORK": {
+      "total": 3,
+      "pass": 2,
+      "fail": 1
+    },
+    "CIRCUIT": {
+      "total": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    "ASYNC": {
+      "total": 2,
+      "pass": 1,
+      "fail": 1
+    },
+    "SECURITY": {
+      "total": 2,
+      "pass": 1,
+      "fail": 1
+    }
+  },
+  "failed_tests": [
+    {
+      "name": "Resolución DNS Worker",
+      "category": "NETWORK",
+      "status": "FAIL",
+      "duration_ms": 2691.68,
+      "message": "No se pudo resolver makederpc",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Heartbeat threading",
+      "category": "ASYNC",
+      "status": "FAIL",
+      "duration_ms": 0.0,
+      "message": "heartbeat.py usa threading en lugar de asyncio",
+      "details": {
+        "suggestion": "Migrar a asyncio.create_task()"
+      },
+      "error": null
+    },
+    {
+      "name": "Credenciales .env",
+      "category": "SECURITY",
+      "status": "ERROR",
+      "duration_ms": 0.51,
+      "message": "Error: 'charmap' codec can't decode byte 0x81 in position 207: character maps to <undefined>",
+      "details": {},
+      "error": "'charmap' codec can't decode byte 0x81 in position 207: character maps to <undefined>"
+    }
+  ],
+  "warning_tests": [],
+  "all_results": [
+    {
+      "name": "Import backend.config",
+      "category": "CONNECTIVITY",
+      "status": "PASS",
+      "duration_ms": 168.55,
+      "message": "Config importado correctamente",
+      "details": {
+        "node_role": "MASTER"
+      },
+      "error": null
+    },
+    {
+      "name": "Ollama local",
+      "category": "CONNECTIVITY",
+      "status": "PASS",
+      "duration_ms": 476.74,
+      "message": "Ollama respondió con 2 modelos",
+      "details": {
+        "models": [
+          "qwen2.5-coder:7b",
+          "qwen3-coder:30b"
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "Estructura directorios",
+      "category": "CONNECTIVITY",
+      "status": "PASS",
+      "duration_ms": 0.0,
+      "message": "Todos los directorios requeridos existen",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Import modelos DB",
+      "category": "DATABASE",
+      "status": "PASS",
+      "duration_ms": 241.34,
+      "message": "Modelos importados correctamente",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Crear tablas DB",
+      "category": "DATABASE",
+      "status": "PASS",
+      "duration_ms": 9.26,
+      "message": "Tablas creadas correctamente",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Conexión DB",
+      "category": "DATABASE",
+      "status": "PASS",
+      "duration_ms": 2.01,
+      "message": "Conexión DB OK",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Configuración settings",
+      "category": "CONFIG",
+      "status": "PASS",
+      "duration_ms": 0.0,
+      "message": "Todas las configuraciones válidas",
+      "details": {
+        "NODE_ROLE válido": true,
+        "DATABASE_URL configurada": true,
+        "OLLAMA_BASE_URL configurada": true,
+        "CORS_ORIGINS configurado": true,
+        "LOG_LEVEL configurado": true
+      },
+      "error": null
+    },
+    {
+      "name": "Import LocalEngineManager",
+      "category": "ENGINE",
+      "status": "PASS",
+      "duration_ms": 7311.94,
+      "message": "Engine manager importado",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Health Check Ollama",
+      "category": "ENGINE",
+      "status": "PASS",
+      "duration_ms": 233.94,
+      "message": "Ollama online con 2 modelos",
+      "details": {
+        "models": [
+          "qwen2.5-coder:7b",
+          "qwen3-coder:30b"
+        ],
+        "url": "http://localhost:11434"
+      },
+      "error": null
+    },
+    {
+      "name": "Generación texto",
+      "category": "ENGINE",
+      "status": "PASS",
+      "duration_ms": 3404.09,
+      "message": "Generación exitosa (7 chars)",
+      "details": {
+        "model": "qwen2.5-coder:7b",
+        "response_preview": "TEST_OK"
+      },
+      "error": null
+    },
+    {
+      "name": "Import NodeDiscoverer",
+      "category": "NETWORK",
+      "status": "PASS",
+      "duration_ms": 1.59,
+      "message": "Discovery importado correctamente",
+      "details": {
+        "magic": "SYNAPSE_V2"
+      },
+      "error": null
+    },
+    {
+      "name": "Socket UDP broadcast",
+      "category": "NETWORK",
+      "status": "PASS",
+      "duration_ms": 0.0,
+      "message": "Sockets UDP configurables",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Resolución DNS Worker",
+      "category": "NETWORK",
+      "status": "FAIL",
+      "duration_ms": 2691.68,
+      "message": "No se pudo resolver makederpc",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Estado Circuit Breaker",
+      "category": "CIRCUIT",
+      "status": "PASS",
+      "duration_ms": 6824.37,
+      "message": "Circuit breaker: 0 fallos, broken_until=0.0",
+      "details": {
+        "failures": 0,
+        "broken_until": 0.0,
+        "threshold": 3,
+        "cooldown": 60
+      },
+      "error": null
+    },
+    {
+      "name": "Heartbeat threading",
+      "category": "ASYNC",
+      "status": "FAIL",
+      "duration_ms": 0.0,
+      "message": "heartbeat.py usa threading en lugar de asyncio",
+      "details": {
+        "suggestion": "Migrar a asyncio.create_task()"
+      },
+      "error": null
+    },
+    {
+      "name": "Paralelismo agentes",
+      "category": "ASYNC",
+      "status": "PASS",
+      "duration_ms": 1.01,
+      "message": "agent_orchestrator usa asyncio.gather",
+      "details": {},
+      "error": null
+    },
+    {
+      "name": "Credenciales .env",
+      "category": "SECURITY",
+      "status": "ERROR",
+      "duration_ms": 0.51,
+      "message": "Error: 'charmap' codec can't decode byte 0x81 in position 207: character maps to <undefined>",
+      "details": {},
+      "error": "'charmap' codec can't decode byte 0x81 in position 207: character maps to <undefined>"
+    },
+    {
+      "name": "CORS wildcard",
+      "category": "SECURITY",
+      "status": "PASS",
+      "duration_ms": 0.0,
+      "message": "CORS configurado con orígenes específicos",
+      "details": {
+        "origins": [
+          "http://localhost:3000",
+          "http://localhost:5173"
+        ]
+      },
+      "error": null
+    }
+  ]
+}

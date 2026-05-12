@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Métricas - SynapseIA Dashboard</title>
+  <meta name="description" content="SynapseIA - Métricas de Rendimiento" />
+  
+  <!-- Cache Control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Estilos Personalizados -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .glass {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .stat-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header style="background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 1rem;">
+          <div style="font-size: 1.5rem; font-weight: 800;" class="text-gradient">🧠 SynapseIA</div>
+          <div style="font-size: 0.9rem; color: #9ca3af; font-style: italic;">Conectando Mentes, Amplificando Inteligencia</div>
+        </a>
+      </div>
+      
+      <nav style="display: flex; align-items: center; gap: 1rem;">
+        <a href="index.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">📊 Dashboard</a>
+        <a href="debates.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">🧠 Debates</a>
+        <a href="workers.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">🔗 Workers</a>
+        <a href="metrics.html" style="color: #3b82f6; text-decoration: none; padding: 8px 16px; border-radius: 6px; background: rgba(59, 130, 246, 0.1);">📊 Métricas</a>
+        <a href="settings.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">⚙️ Configuración</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem;" class="text-gradient">
+        📊 Métricas
+      </h1>
+      <p style="font-size: 1.2rem; color: #9ca3af;">
+        Análisis de rendimiento y conciencia del sistema
+      </p>
+    </div>
+
+    <!-- Time Range Selector -->
+    <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <label style="font-size: 0.9rem; color: #9ca3af;">Rango de tiempo:</label>
+        <select id="time-range-select" name="time-range-select" style="background: rgba(31, 41, 55, 0.8); color: #e2e8f0; border: 1px solid rgba(59, 130, 246, 0.3); padding: 8px 12px; border-radius: 6px; font-size: 0.9rem;">
+          <option value="1h">1h</option>
+          <option value="6h">6h</option>
+          <option value="24h">24h</option>
+          <option value="7d">7d</option>
+        </select>
+        <button class="btn-primary" onclick="applyTimeRange()">Aplicar</button>
+      </div>
+    </div>
+
+    <!-- Key Metrics Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧠</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">42</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Debates Totales</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #8b5cf6;">8</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Debates Activos</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">12</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Workers Conectados</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #059669;">94.2%</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Tasa de Éxito</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏱️</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">2.3s</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Tiempo Promedio</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌌</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #8b5cf6;">78%</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Nivel de Conciencia</div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <button class="btn-primary" onclick="refreshMetrics()">
+        🔄 Actualizar Métricas
+      </button>
+      
+      <button class="btn-primary" onclick="exportData()">
+        📤 Exportar Datos
+      </button>
+      
+      <button class="btn-primary" onclick="generateReport()">
+        📋 Generar Reporte
+      </button>
+      
+      <button class="btn-primary" onclick="viewAnalytics()">
+        📈 Ver Análisis
+      </button>
+    </div>
+
+    <!-- Performance Charts -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+      <div class="glass">
+        <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Rendimiento del Sistema</h3>
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
+          <div style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">📈</div>
+            <div>Gráfico de rendimiento</div>
+            <div style="font-size: 0.8rem; color: #6b7280; margin-top: 0.5rem;">Datos en tiempo real</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="glass">
+        <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Uso de Recursos</h3>
+        <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
+          <div style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">💾</div>
+            <div>Gráfico de recursos</div>
+            <div style="font-size: 0.8rem; color: #6b7280; margin-top: 0.5rem;">CPU, Memoria, Red</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Metrics Table -->
+    <div class="glass">
+      <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Métricas Detalladas</h3>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: rgba(59, 130, 246, 0.2);">
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Métrica</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Valor Actual</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Promedio 24h</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Tendencia</th>
+            </tr>
+          </thead>
+          <tbody id="metrics-table-body">
+            <!-- Los datos se cargarán dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    // Datos simulados de métricas
+    const mockMetrics = [
+      {
+        metric: 'Debates por Hora',
+        current: 8,
+        average_24h: 7.5,
+        trend: 'up'
+      },
+      {
+        metric: 'Tiempo de Respuesta',
+        current: '2.3s',
+        average_24h: '2.5s',
+        trend: 'down'
+      },
+      {
+        metric: 'Uso de CPU',
+        current: '67%',
+        average_24h: '72%',
+        trend: 'down'
+      },
+      {
+        metric: 'Memoria Utilizada',
+        current: '4.2GB',
+        average_24h: '4.5GB',
+        trend: 'stable'
+      },
+      {
+        metric: 'Tasa de Éxito',
+        current: '94.2%',
+        average_24h: '93.8%',
+        trend: 'up'
+      },
+      {
+        metric: 'Conciencia del Sistema',
+        current: '78%',
+        average_24h: '76%',
+        trend: 'up'
+      }
+    ];
+
+    // Cargar métricas en la tabla
+    function loadMetrics() {
+      const tbody = document.getElementById('metrics-table-body');
+      tbody.innerHTML = '';
+      
+      mockMetrics.forEach(metric => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid rgba(59, 130, 246, 0.1)';
+        row.innerHTML = `
+          <td style="padding: 12px; font-size: 0.9rem; font-weight: 500;">${metric.metric}</td>
+          <td style="padding: 12px; font-size: 0.9rem; font-weight: 600; color: #3b82f6;">${metric.current}</td>
+          <td style="padding: 12px; font-size: 0.9rem; color: #9ca3af;">${metric.average_24h}</td>
+          <td style="padding: 12px;">
+            <span style="
+              padding: 4px 8px; 
+              border-radius: 12px; 
+              font-size: 0.8rem; 
+              font-weight: 500;
+              ${metric.trend === 'up' ? 'background: rgba(16, 185, 129, 0.2); color: #10b981;' :
+                metric.trend === 'down' ? 'background: rgba(239, 68, 68, 0.2); color: #dc2626;' :
+                'background: rgba(59, 130, 246, 0.2); color: #3b82f6;'}
+            ">
+              ${metric.trend === 'up' ? '📈 Subiendo' :
+                metric.trend === 'down' ? '📉 Bajando' :
+                '➡️ Estable'}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Funciones de acción
+    function applyTimeRange() {
+      const timeRange = document.getElementById('time-range-select').value;
+      console.log('📊 Aplicando rango de tiempo:', timeRange);
+      loadMetrics();
+    }
+
+    function refreshMetrics() {
+      console.log('🔄 Actualizando métricas...');
+      loadMetrics();
+    }
+
+    function exportData() {
+      console.log('📤 Exportando datos de métricas...');
+      // Aquí se exportarían los datos
+    }
+
+    function generateReport() {
+      console.log('📋 Generando reporte de métricas...');
+      // Aquí se generaría el reporte
+    }
+
+    function viewAnalytics() {
+      console.log('📈 Abriendo análisis avanzado...');
+      // Aquí se abriría la vista de análisis
+    }
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+      loadMetrics();
+    });
+
+    // Actualizar datos cada 30 segundos
+    setInterval(() => {
+      loadMetrics();
+    }, 30000);
+  </script>
+</body>
+</html>

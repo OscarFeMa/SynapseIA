@@ -1,159 +1,146 @@
 """
-Sistema de Heartbeat basado en Pensamiento Coral.
+Sistema de Heartbeat basado en Pensamiento Coral - Versión Asyncio.
 Permite monitorear la conectividad entre Master y Worker en tiempo real.
+MIGRADO de threading a asyncio para compatibilidad con FastAPI/uvloop.
 """
+import asyncio
 import socket
 import json
-import threading
-import time
-import logging
+import structlog
 from typing import Optional, Callable
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 class HeartbeatManager:
-    """Gestor de heartbeat para monitorear conectividad."""
+    """Gestor de heartbeat async para monitorear conectividad Master/Worker."""
     
     def __init__(self, role: str, interval: int = 5, timeout: int = 15):
-        """
-        Inicializa el gestor de heartbeat.
-        
-        Args:
-            role: 'MASTER' o 'WORKER'
-            interval: Intervalo entre heartbeats en segundos
-            timeout: Tiempo máximo sin heartbeat antes de marcar como desconectado
-        """
         self.role = role
         self.interval = interval
         self.timeout = timeout
         self.running = False
-        self.last_heartbeat = None
-        self.heartbeat_thread = None
-        self.tcp_socket = None
+        self.last_heartbeat: Optional[datetime] = None
+        self._task: Optional[asyncio.Task] = None
+        self._reader: Optional[asyncio.StreamReader] = None
+        self._writer: Optional[asyncio.StreamWriter] = None
+        self._server: Optional[asyncio.Server] = None
+        self._stop_event = asyncio.Event()
         self.peer_ip: Optional[str] = None
         self.on_heartbeat_received: Optional[Callable] = None
         self.on_connection_lost: Optional[Callable] = None
         
-    def start(self, peer_ip: Optional[str] = None):
-        """
-        Inicia el sistema de heartbeat.
-        
-        Args:
-            peer_ip: IP del peer (Master para Worker, Worker para Master)
-        """
+    async def start(self, peer_ip: Optional[str] = None):
+        """Inicia el sistema de heartbeat de forma async."""
         self.peer_ip = peer_ip
         self.running = True
         self.last_heartbeat = datetime.now()
         
         if self.role == "WORKER":
-            # Worker envía heartbeats al Master
-            self.heartbeat_thread = threading.Thread(
-                target=self._send_heartbeats,
-                daemon=True
-            )
-            self.heartbeat_thread.start()
-            logger.info(f"Heartbeat iniciado (Worker → {peer_ip})")
+            self._task = asyncio.create_task(self._send_heartbeats())
+            logger.info("heartbeat.started", role="WORKER", peer_ip=peer_ip)
         else:
-            # Master escucha heartbeats del Worker
-            self.heartbeat_thread = threading.Thread(
-                target=self._listen_heartbeats,
-                daemon=True
-            )
-            self.heartbeat_thread.start()
-            logger.info("Heartbeat iniciado (Master escuchando)")
+            self._task = asyncio.create_task(self._listen_heartbeats())
+            logger.info("heartbeat.started", role="MASTER")
     
-    def stop(self):
-        """Detiene el sistema de heartbeat."""
+    async def stop(self):
+        """Detiene el sistema de heartbeat de forma async."""
         self.running = False
-        if self.heartbeat_thread:
-            self.heartbeat_thread.join(timeout=2)
-        if self.tcp_socket:
-            self.tcp_socket.close()
-        logger.info("Heartbeat detenido")
+        self._stop_event.set()
+        
+        if self._task:
+            self._task.cancel()
+            try:
+                await self._task
+            except asyncio.CancelledError:
+                pass
+        
+        if self._writer:
+            self._writer.close()
+            try:
+                await self._writer.wait_closed()
+            except Exception:
+                pass
+        
+        if self._server:
+            self._server.close()
+            await self._server.wait_closed()
+        
+        logger.info("heartbeat.stopped")
     
-    def _send_heartbeats(self):
-        """Envía heartbeats periódicos al Master (Worker)."""
+    async def _send_heartbeats(self):
+        """Worker envía heartbeats periódicos al Master via asyncio."""
         while self.running and self.peer_ip:
             try:
-                if not self.tcp_socket:
-                    self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    self.tcp_socket.settimeout(5)
+                if not self._writer:
                     try:
-                        self.tcp_socket.connect((self.peer_ip, 54322))
-                        logger.info(f"Conexión TCP establecida con Master en {self.peer_ip}")
+                        self._reader, self._writer = await asyncio.wait_for(
+                            asyncio.open_connection(self.peer_ip, 54322),
+                            timeout=5.0
+                        )
+                        logger.info("heartbeat.tcp_connected", peer_ip=self.peer_ip)
+                    except asyncio.TimeoutError:
+                        logger.warning("heartbeat.tcp_connect_timeout", peer_ip=self.peer_ip)
+                        await asyncio.sleep(self.interval)
+                        continue
                     except Exception as e:
-                        logger.error(f"Error conectando al Master: {e}")
-                        self.tcp_socket.close()
-                        self.tcp_socket = None
-                        time.sleep(self.interval)
+                        logger.error("heartbeat.tcp_connect_error", error=str(e))
+                        await asyncio.sleep(self.interval)
                         continue
                 
-                # Enviar heartbeat
                 heartbeat_msg = {
                     'type': 'HEARTBEAT',
                     'timestamp': datetime.now().isoformat(),
                     'role': 'WORKER'
                 }
                 
-                self.tcp_socket.send(json.dumps(heartbeat_msg).encode('utf-8'))
-                logger.debug("Heartbeat enviado")
+                data = json.dumps(heartbeat_msg).encode('utf-8')
+                self._writer.write(data)
+                await self._writer.drain()
+                logger.debug("heartbeat.sent")
                 
-                time.sleep(self.interval)
+                await asyncio.sleep(self.interval)
                 
             except Exception as e:
-                logger.error(f"Error enviando heartbeat: {e}")
-                if self.tcp_socket:
-                    self.tcp_socket.close()
-                    self.tcp_socket = None
-                time.sleep(self.interval)
+                logger.error("heartbeat.send_error", error=str(e))
+                self._reader = None
+                self._writer = None
+                await asyncio.sleep(self.interval)
     
-    def _listen_heartbeats(self):
-        """Escucha heartbeats del Worker (Master)."""
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server_socket.bind(("0.0.0.0", 54322))
-        server_socket.listen(5)
-        server_socket.settimeout(1.0)
-        
-        logger.info("Escuchando heartbeats en puerto 54322")
-        
-        while self.running:
-            try:
-                try:
-                    client_socket, addr = server_socket.accept()
-                    logger.info(f"Conexión heartbeat desde {addr[0]}")
-                    
-                    # Hilo para manejar esta conexión
-                    threading.Thread(
-                        target=self._handle_heartbeat_connection,
-                        args=(client_socket, addr[0]),
-                        daemon=True
-                    ).start()
-                    
-                except socket.timeout:
-                    # Verificar timeout de heartbeat
-                    if self.last_heartbeat:
-                        elapsed = (datetime.now() - self.last_heartbeat).total_seconds()
-                        if elapsed > self.timeout and self.on_connection_lost:
-                            logger.warning(f"Worker desconectado (sin heartbeat por {elapsed}s)")
-                            self.on_connection_lost()
-                    continue
-                    
-            except Exception as e:
-                logger.error(f"Error en listener heartbeat: {e}")
-                time.sleep(1)
-        
-        server_socket.close()
+    async def _listen_heartbeats(self):
+        """Master escucha heartbeats del Worker via asyncio Server."""
+        try:
+            self._server = await asyncio.start_server(
+                self._handle_client,
+                "0.0.0.0",
+                54322
+            )
+            logger.info("heartbeat.listening", port=54322)
+            
+            # Monitor de timeout en background
+            monitor_task = asyncio.create_task(self._monitor_timeout())
+            
+            async with self._server:
+                await self._server.serve_forever()
+                
+        except asyncio.CancelledError:
+            logger.info("heartbeat.cancelled")
+        except Exception as e:
+            logger.error("heartbeat.listen_error", error=str(e))
     
-    def _handle_heartbeat_connection(self, client_socket: socket.socket, peer_ip: str):
-        """Maneja una conexión de heartbeat entrante."""
+    async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """Maneja una conexión de heartbeat entrante (Master)."""
+        peer_ip = writer.get_extra_info('peername')[0]
+        logger.info("heartbeat.client_connected", peer_ip=peer_ip)
+        
         try:
             while self.running:
                 try:
-                    client_socket.settimeout(self.timeout + 5)
-                    data = client_socket.recv(1024)
+                    data = await asyncio.wait_for(
+                        reader.read(1024),
+                        timeout=self.timeout + 5
+                    )
                     
                     if not data:
                         break
@@ -164,29 +151,47 @@ class HeartbeatManager:
                         if message.get('type') == 'HEARTBEAT':
                             self.last_heartbeat = datetime.now()
                             self.peer_ip = peer_ip
-                            logger.debug(f"Heartbeat recibido de {peer_ip}")
+                            logger.debug("heartbeat.received", peer_ip=peer_ip)
                             
                             if self.on_heartbeat_received:
-                                self.on_heartbeat_received(peer_ip)
+                                await self.on_heartbeat_received(peer_ip)
                     
                     except json.JSONDecodeError:
-                        logger.warning("Mensaje heartbeat inválido")
+                        logger.warning("heartbeat.invalid_message", peer_ip=peer_ip)
                 
-                except socket.timeout:
+                except asyncio.TimeoutError:
+                    logger.warning("heartbeat.client_timeout", peer_ip=peer_ip)
                     break
                     
         except Exception as e:
-            logger.error(f"Error manejando conexión heartbeat: {e}")
+            logger.error("heartbeat.client_error", peer_ip=peer_ip, error=str(e))
         finally:
-            client_socket.close()
+            writer.close()
+            try:
+                await writer.wait_closed()
+            except Exception:
+                pass
+            logger.info("heartbeat.client_disconnected", peer_ip=peer_ip)
+    
+    async def _monitor_timeout(self):
+        """Monitorea timeout de heartbeat y notifica desconexiones."""
+        while self.running:
+            try:
+                await asyncio.sleep(self.interval)
+                
+                if self.last_heartbeat:
+                    elapsed = (datetime.now() - self.last_heartbeat).total_seconds()
+                    if elapsed > self.timeout:
+                        logger.warning("heartbeat.timeout", elapsed=elapsed, timeout=self.timeout)
+                        if self.on_connection_lost:
+                            await self.on_connection_lost()
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error("heartbeat.monitor_error", error=str(e))
     
     def is_alive(self) -> bool:
-        """
-        Verifica si el peer está vivo basado en heartbeat.
-        
-        Returns:
-            True si el peer está vivo, False en caso contrario
-        """
+        """Verifica si el peer está vivo basado en heartbeat."""
         if not self.last_heartbeat:
             return False
         

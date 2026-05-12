@@ -1,0 +1,2156 @@
+{
+  "summary": {
+    "files_analyzed": 60,
+    "lines_analyzed": 15322,
+    "total_issues": 266,
+    "critical": 1,
+    "high": 117,
+    "medium": 80,
+    "low": 68
+  },
+  "by_category": {
+    "SECURITY": 103,
+    "CODE_QUALITY": 77,
+    "ERROR_HANDLING": 37,
+    "PERFORMANCE": 34,
+    "RESOURCES": 13,
+    "ARCHITECTURE": 1,
+    "CONFIG": 1
+  },
+  "critical_issues": [
+    {
+      "file": "backend\\network\\heartbeat.py",
+      "line": 1,
+      "severity": "CRITICAL",
+      "category": "ARCHITECTURE",
+      "message": "Uso de threading en código async - incompatibilidad con FastAPI/uvloop",
+      "suggestion": "Reemplazar threading por asyncio.create_task() y asyncio.Event"
+    }
+  ],
+  "high_issues": [
+    {
+      "file": "backend\\config.py",
+      "line": 93,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: password",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\base.py",
+      "line": 77,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\base.py",
+      "line": 54,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: api_key",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\deepseek.py",
+      "line": 68,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "backend\\adapters\\deepseek.py",
+      "line": 44,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\deepseek.py",
+      "line": 49,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: api_key",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\gemini.py",
+      "line": 58,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\gemini.py",
+      "line": 68,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: api_key",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\groq.py",
+      "line": 68,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "backend\\adapters\\groq.py",
+      "line": 44,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\groq.py",
+      "line": 49,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: api_key",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\ollama.py",
+      "line": 186,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\adapters\\ollama.py",
+      "line": 191,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\agent_orchestrator.py",
+      "line": 154,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\agent_orchestrator.py",
+      "line": 201,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\agent_orchestrator.py",
+      "line": 216,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 1297,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 1298,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\local_engine_manager.py",
+      "line": 175,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\local_engine_manager.py",
+      "line": 188,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\reputation.py",
+      "line": 118,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\reputation.py",
+      "line": 126,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 34,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 43,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 251,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 270,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 335,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 417,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 653,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 325,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 326,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 408,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 409,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 700,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 701,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 745,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 746,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 954,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 955,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 973,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1035,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1036,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1051,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1052,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1085,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1106,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1107,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1126,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1127,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1337,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1338,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1549,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1550,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1564,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 373,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 374,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 389,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 390,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\tribunal.py",
+      "line": 161,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\tribunal.py",
+      "line": 173,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\tribunal.py",
+      "line": 203,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\tribunal.py",
+      "line": 211,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\tribunal.py",
+      "line": 226,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\engine\\ultra_debate_controller.py",
+      "line": 160,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "backend\\memory\\hybrid_memory_v2.py",
+      "line": 130,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\memory\\hybrid_memory_v2.py",
+      "line": 147,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\network\\discovery.py",
+      "line": 100,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "backend\\network\\discovery.py",
+      "line": 120,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 191,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 16,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: secret",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 50,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: secret",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 102,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: secret",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 16,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 50,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 102,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\services\\rdp_manager.py",
+      "line": 227,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: password",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 99,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 100,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 143,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 144,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 206,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 207,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 204,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 205,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 316,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 352,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 449,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 473,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 474,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 484,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 651,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\system.py",
+      "line": 53,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: password",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "backend\\api\\routes\\system.py",
+      "line": 138,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\analisis_exhaustivo.py",
+      "line": 303,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "scripts\\analisis_exhaustivo.py",
+      "line": 213,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: password",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\analisis_exhaustivo.py",
+      "line": 213,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: secret",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\analisis_exhaustivo.py",
+      "line": 213,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\analisis_exhaustivo.py",
+      "line": 213,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: api_key",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 62,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 65,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 49,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 63,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 251,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 53,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "message": "Except genérico (bare except) - captura KeyboardInterrupt y SystemExit",
+      "suggestion": "Usar 'except Exception as e:' como mínimo"
+    },
+    {
+      "file": "scripts\\test_session.py",
+      "line": 105,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_session.py",
+      "line": 126,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_session.py",
+      "line": 127,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_session.py",
+      "line": 131,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_session.py",
+      "line": 156,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 69,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 80,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 112,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 113,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 115,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 124,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 131,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 233,
+      "severity": "HIGH",
+      "category": "SECURITY",
+      "message": "Posible credencial hardcoded: token",
+      "suggestion": "Mover a variables de entorno o archivo .env"
+    }
+  ],
+  "medium_issues": [
+    {
+      "file": "backend\\adapters\\base.py",
+      "line": 117,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\adapters\\base.py",
+      "line": 171,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\adapters\\gemini.py",
+      "line": 92,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\adapters\\ollama.py",
+      "line": 67,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\adapters\\ollama.py",
+      "line": 243,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\adapters\\ollama.py",
+      "line": 131,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función generate tiene complejidad ciclomática alta (11)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "backend\\adapters\\openrouter.py",
+      "line": 45,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\adapters\\web_agent.py",
+      "line": 59,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\websocket.py",
+      "line": 124,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\api\\websocket.py",
+      "line": 141,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\database\\supabase_client.py",
+      "line": 165,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\engine\\agent_orchestrator.py",
+      "line": 415,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\agent_orchestrator.py",
+      "line": 121,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función call_agent tiene complejidad ciclomática alta (21)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 327,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 366,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 546,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 549,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 598,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 871,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 941,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 138,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función create_consensus_debate_with_id tiene complejidad ciclomática alta (11)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "backend\\engine\\intervention_taxonomy.py",
+      "line": 136,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\engine\\quality_monitor.py",
+      "line": 155,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\engine\\reputation.py",
+      "line": 130,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\reputation.py",
+      "line": 374,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 303,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 266,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1198,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1299,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1373,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1377,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1450,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 633,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 359,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 637,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 266,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 266,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 266,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 217,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función create_debate_with_id tiene complejidad ciclomática alta (33)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 125,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 125,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 125,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 125,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 125,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 83,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función run_session tiene complejidad ciclomática alta (20)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "backend\\engine\\tribunal.py",
+      "line": 133,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\engine\\ultra_debate_controller.py",
+      "line": 74,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\network\\discovery.py",
+      "line": 107,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "backend\\network\\discovery.py",
+      "line": 182,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "backend\\network\\heartbeat.py",
+      "line": 114,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "backend\\network\\heartbeat.py",
+      "line": 81,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 84,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 43,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 186,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 125,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 230,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 255,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 68,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 257,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 283,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\debug.py",
+      "line": 88,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\debug.py",
+      "line": 114,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\debug.py",
+      "line": 77,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\health.py",
+      "line": 46,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\system.py",
+      "line": 123,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "backend\\api\\routes\\system.py",
+      "line": 249,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "scripts\\analisis_exhaustivo.py",
+      "line": 92,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "message": "Except Exception sin logging del error",
+      "suggestion": "Agregar logging del error para debugging"
+    },
+    {
+      "file": "scripts\\check_db.py",
+      "line": 41,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Posible N+1 query - operación de DB dentro de loop",
+      "suggestion": "Batch operations o bulk insert/update"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 108,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 122,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 57,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 44,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 187,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 207,
+      "severity": "MEDIUM",
+      "category": "RESOURCES",
+      "message": "Socket creado sin manejo de contexto (try/finally o with)",
+      "suggestion": "Usar try/finally o context manager para cerrar sockets"
+    },
+    {
+      "file": "scripts\\test_discovery.py",
+      "line": 31,
+      "severity": "MEDIUM",
+      "category": "PERFORMANCE",
+      "message": "Await dentro de loop for - considerar asyncio.gather",
+      "suggestion": "Usar asyncio.gather() para ejecución paralela"
+    },
+    {
+      "file": "scripts\\test_health.py",
+      "line": 13,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función test_health tiene complejidad ciclomática alta (11)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "scripts\\test_session.py",
+      "line": 14,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función test_create_and_run_session tiene complejidad ciclomática alta (14)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 33,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función test_websocket_streaming tiene complejidad ciclomática alta (29)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 82,
+      "severity": "MEDIUM",
+      "category": "CODE_QUALITY",
+      "message": "Función handle_events tiene complejidad ciclomática alta (20)",
+      "suggestion": "Simplificar lógica condicional"
+    },
+    {
+      "file": ".env",
+      "line": 1,
+      "severity": "MEDIUM",
+      "category": "CONFIG",
+      "message": "Variables faltantes en .env: AUTO_ELEVATION_ENABLED, WEB_AGENT_TIMEOUT_SECONDS, OPENROUTER_MAX_RETRIES, JAN_KEEP_ALIVE, JAN_TIMEOUT_SECONDS, WEB_AGENT_SESSION_DIR, OPENROUTER_TIMEOUT_SECONDS, OLLAMA_BASE_URL, WEB_AGENT_HEADLESS, OPENROUTER_BASE_URL, REPUTATION_MIN_DEBATES_FOR_WEIGHT, WEB_AGENT_BROWSER, SUPABASE_PROJECT, WEB_AGENT_SITES, DATABASE_URL, REPUTATION_EMA_ALPHA, LM_STUDIO_TIMEOUT_SECONDS, OLLAMA_KEEP_ALIVE, LM_STUDIO_BASE_URL, OPENROUTER_APP_NAME, DEFAULT_MAX_ROUNDS, CORS_ORIGINS, LM_STUDIO_KEEP_ALIVE, WORKER_HOST, LM_STUDIO_MAX_RETRIES, OPENROUTER_HTTP_REFERER, OLLAMA_TIMEOUT_SECONDS, TRIBUNAL_MAX_ITERATIONS, DEFAULT_COST_LIMIT_USD, JAN_BASE_URL, VITE_WS_BASE_URL, OLLAMA_MAX_RETRIES, VITE_API_BASE_URL, JAN_MAX_RETRIES",
+      "suggestion": "Actualizar .env con todas las variables requeridas"
+    }
+  ],
+  "low_issues": [
+    {
+      "file": "backend\\main.py",
+      "line": 65,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función lifespan muy larga (68 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\adapters\\base.py",
+      "line": 58,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función chat_completion muy larga (60 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\adapters\\gemini.py",
+      "line": 28,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función chat_completion muy larga (68 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\adapters\\ollama.py",
+      "line": 131,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función generate muy larga (76 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\api\\middleware.py",
+      "line": 32,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función dispatch muy larga (59 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\database\\supabase_client.py",
+      "line": 28,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función elevate_verdict muy larga (72 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\agent_orchestrator.py",
+      "line": 121,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función call_agent muy larga (275 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 1400,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función get_consensus_debate_config muy larga (64 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 138,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función create_consensus_debate_with_id muy larga (133 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 313,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_agent_proposal_with_retry muy larga (103 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 418,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_agent_proposal_once muy larga (73 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 526,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _run_refutation_round muy larga (61 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 589,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_cross_validation_with_retry muy larga (53 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 644,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_cross_validation_once muy larga (90 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 781,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _run_synthesis_round muy larga (107 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 963,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_convergence_response muy larga (66 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 1031,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _calculate_consensus_score muy larga (69 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 1118,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_final_consensus muy larga (51 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\consensus_debate_controller.py",
+      "line": 1250,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _persist_consensus_to_db muy larga (93 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\convergence.py",
+      "line": 44,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función evaluate muy larga (98 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\local_engine_manager.py",
+      "line": 133,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función generate muy larga (88 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\quality_monitor.py",
+      "line": 29,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función evaluate muy larga (52 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\reputation.py",
+      "line": 61,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función calculate_session_reputation muy larga (107 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\reputation_manager.py",
+      "line": 26,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función update_after_turn muy larga (86 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 51,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función execute_round muy larga (170 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 275,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _execute_critique_phase muy larga (81 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\round_controller.py",
+      "line": 358,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _execute_synthesis_phase muy larga (80 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1650,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función get_standard_debate_config muy larga (66 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1719,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función get_local_only_config muy larga (51 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 217,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función create_debate_with_id muy larga (442 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 788,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _run_tribunal muy larga (62 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 852,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_structured_report muy larga (84 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 938,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _save_transcript muy larga (67 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1007,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función get_debate_from_db muy larga (56 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1096,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _sync_to_supabase muy larga (56 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1162,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función run_iterative_debate muy larga (124 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1288,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _run_analysis_phase muy larga (73 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1363,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _run_cruzamientos_phase muy larga (59 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1424,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _run_validation_phase muy larga (68 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\sequential_debate_controller.py",
+      "line": 1494,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _run_consensus_phase muy larga (74 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 83,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función run_session muy larga (246 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 331,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función get_session_detail muy larga (76 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\session_manager.py",
+      "line": 507,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _compile_final_summary muy larga (51 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\tribunal.py",
+      "line": 104,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función issue_verdict muy larga (275 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\engine\\ultra_debate_controller.py",
+      "line": 33,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función create_ultra_debate_with_id muy larga (135 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\network\\discovery.py",
+      "line": 105,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _broadcast_loop muy larga (61 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\network\\discovery.py",
+      "line": 168,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función start muy larga (57 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\network\\tcp_handshake.py",
+      "line": 74,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función accept_worker muy larga (69 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\services\\rdp_manager.py",
+      "line": 120,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función connect_to_worker_async muy larga (83 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\services\\rdp_manager.py",
+      "line": 206,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _execute_rdp_sync muy larga (72 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 74,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función sync_debate muy larga (106 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\services\\supabase_sync.py",
+      "line": 182,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función sync_consensus_debate muy larga (118 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 291,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función create_debate muy larga (74 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 429,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función get_debate_transcript muy larga (76 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\api\\routes\\debate.py",
+      "line": 623,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función create_iterative_debate muy larga (100 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\api\\routes\\health.py",
+      "line": 53,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función health_check muy larga (58 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "backend\\api\\routes\\sessions.py",
+      "line": 37,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función create_session muy larga (53 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\analisis_exhaustivo.py",
+      "line": 325,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función _generate_report muy larga (53 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\check_db.py",
+      "line": 13,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función check_database muy larga (96 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 100,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función test_udp_discovery muy larga (78 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 180,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función test_http_endpoint muy larga (56 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\network_diagnostic.py",
+      "line": 300,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función run_all_tests muy larga (59 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 93,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función configure_env_file muy larga (83 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\synapse_link_manager.py",
+      "line": 254,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función main muy larga (83 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\test_health.py",
+      "line": 13,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función test_health muy larga (83 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\test_session.py",
+      "line": 14,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función test_create_and_run_session muy larga (146 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 33,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función test_websocket_streaming muy larga (215 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    },
+    {
+      "file": "scripts\\test_websocket.py",
+      "line": 82,
+      "severity": "LOW",
+      "category": "CODE_QUALITY",
+      "message": "Función handle_events muy larga (104 líneas)",
+      "suggestion": "Refactorizar en funciones más pequeñas"
+    }
+  ]
+}

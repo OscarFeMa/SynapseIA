@@ -65,7 +65,8 @@ class DeepSeekClient:
                                 delta = data["choices"][0]["delta"]
                                 if "content" in delta:
                                     yield delta["content"]
-                            except:
+                            except (KeyError, IndexError) as e:
+                                logger.debug("deepseek.parse_error", error=str(e))
                                 continue
         except Exception as e:
             logger.error("deepseek.request_failed", error=str(e))

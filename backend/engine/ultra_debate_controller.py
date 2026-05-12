@@ -157,8 +157,8 @@ class UltraDebateController:
                     debate_ctrl = SequentialDebateController()
                     if session_id in debate_ctrl.active_sessions:
                         debate_ctrl.active_sessions[session_id] = session
-                except:
-                    pass  # Si falla, no es crítico
+                except Exception as e:
+                    logger.debug("ultra_debate.session_sync_failed", error=str(e))  # Si falla, no es crítico
                 
                 return session_id
             

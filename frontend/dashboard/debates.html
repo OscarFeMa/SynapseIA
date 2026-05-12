@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debates - SynapseIA Dashboard</title>
+  <meta name="description" content="SynapseIA - Gestión de Debates" />
+  
+  <!-- Cache Control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Estilos Personalizados -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .glass {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .stat-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header style="background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(59, 130, 246, 0.3); padding: 1rem 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 1rem;">
+          <div style="font-size: 1.5rem; font-weight: 800;" class="text-gradient">🧠 SynapseIA</div>
+          <div style="font-size: 0.9rem; color: #9ca3af; font-style: italic;">Conectando Mentes, Amplificando Inteligencia</div>
+        </a>
+      </div>
+      
+      <nav style="display: flex; align-items: center; gap: 1rem;">
+        <a href="index.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">📊 Dashboard</a>
+        <a href="debates.html" style="color: #3b82f6; text-decoration: none; padding: 8px 16px; border-radius: 6px; background: rgba(59, 130, 246, 0.1);">🧠 Debates</a>
+        <a href="workers.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">🔗 Workers</a>
+        <a href="metrics.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">📊 Métricas</a>
+        <a href="settings.html" style="color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease;" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#9ca3af'">⚙️ Configuración</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem;" class="text-gradient">
+        🧠 Debates
+      </h1>
+      <p style="font-size: 1.2rem; color: #9ca3af;">
+        Sistema de razonamiento colaborativo y toma de decisiones
+      </p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧠</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">42</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Debates Totales</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #8b5cf6;">8</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Debates Activos</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">85%</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Consenso Promedio</div>
+      </div>
+      
+      <div class="stat-card">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏱️</div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">2.3s</div>
+        <div style="font-size: 0.9rem; color: #9ca3af;">Tiempo Promedio</div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <button class="btn-primary" onclick="startNewDebate()">
+        🧠 Iniciar Nuevo Debate
+      </button>
+      
+      <button class="btn-primary" onclick="viewActiveDebates()">
+        ⚡ Ver Debates Activos
+      </button>
+      
+      <button class="btn-primary" onclick="viewHistory()">
+        📋 Ver Historial
+      </button>
+      
+      <button class="btn-primary" onclick="exportResults()">
+        📤 Exportar Resultados
+      </button>
+    </div>
+
+    <!-- Debates Table -->
+    <div class="glass">
+      <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Debates Recientes</h3>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: rgba(59, 130, 246, 0.2);">
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Tema</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Estado</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Modo</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Participantes</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Duración</th>
+              <th style="padding: 12px; text-align: left; font-weight: 600; color: #e2e8f0; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="debates-table-body">
+            <!-- Los datos se cargarán dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    // Datos simulados de debates
+    const mockDebates = [
+      {
+        id: 'debate-1',
+        topic: 'El futuro de la IA en la toma de decisiones',
+        status: 'completed',
+        mode: 'standard',
+        duration: '2.5 min',
+        participants: 4,
+        consensus_score: 85,
+        timestamp: new Date().toISOString()
+      },
+      {
+        id: 'debate-2',
+        topic: 'Ética en el desarrollo de sistemas autónomos',
+        status: 'running',
+        mode: 'consensus',
+        duration: '1.2 min',
+        participants: 6,
+        consensus_score: 72,
+        timestamp: new Date().toISOString()
+      },
+      {
+        id: 'debate-3',
+        topic: 'Impacto del razonamiento colaborativo',
+        status: 'completed',
+        mode: 'sequential',
+        duration: '3.8 min',
+        participants: 5,
+        consensus_score: 91,
+        timestamp: new Date().toISOString()
+      },
+      {
+        id: 'debate-4',
+        topic: 'Optimización de algoritmos de aprendizaje',
+        status: 'running',
+        mode: 'quantum',
+        duration: '0.8 min',
+        participants: 8,
+        consensus_score: 68,
+        timestamp: new Date().toISOString()
+      }
+    ];
+
+    // Cargar debates en la tabla
+    function loadDebates() {
+      const tbody = document.getElementById('debates-table-body');
+      tbody.innerHTML = '';
+      
+      mockDebates.forEach(debate => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid rgba(59, 130, 246, 0.1)';
+        row.innerHTML = `
+          <td style="padding: 12px; font-size: 0.9rem;">${debate.topic}</td>
+          <td style="padding: 12px;">
+            <span style="
+              padding: 4px 8px; 
+              border-radius: 12px; 
+              font-size: 0.8rem; 
+              font-weight: 500;
+              ${debate.status === 'completed' ? 'background: rgba(16, 185, 129, 0.2); color: #10b981;' :
+                debate.status === 'running' ? 'background: rgba(59, 130, 246, 0.2); color: #3b82f6;' :
+                'background: rgba(239, 68, 68, 0.2); color: #dc2626;'}
+            ">
+              ${debate.status === 'completed' ? '✅ Completado' :
+                debate.status === 'running' ? '⚡ Activo' :
+                '❌ Fallido'}
+            </span>
+          </td>
+          <td style="padding: 12px;">
+            <span style="color: #8b5cf6; font-weight: 500;">
+              ${debate.mode === 'standard' ? '🧠 Estándar' :
+                debate.mode === 'consensus' ? '🤝 Consenso' :
+                debate.mode === 'sequential' ? '🔄 Secuencial' :
+                debate.mode === 'quantum' ? '⚛️ Cuántico' :
+                '📊 Estándar'}
+            </span>
+          </td>
+          <td style="padding: 12px; color: #9ca3af;">${debate.participants}</td>
+          <td style="padding: 12px; color: #9ca3af;">${debate.duration}</td>
+          <td style="padding: 12px;">
+            <button onclick="viewDebate('${debate.id}')" style="
+              background: #3b82f6; 
+              color: white; 
+              padding: 6px 12px; 
+              border-radius: 6px; 
+              border: none; 
+              cursor: pointer; 
+              font-size: 0.8rem;
+              transition: all 0.3s ease;
+              margin-right: 4px;
+            " onmouseover="this.style.background='#8b5cf6'" onmouseout="this.style.background='#3b82f6'">
+              Ver →
+            </button>
+            ${debate.status === 'running' ? `
+              <button onclick="stopDebate('${debate.id}')" style="
+                background: #dc2626; 
+                color: white; 
+                padding: 6px 12px; 
+                border-radius: 6px; 
+                border: none; 
+                cursor: pointer; 
+                font-size: 0.8rem;
+                transition: all 0.3s ease;
+              " onmouseover="this.style.background='#991b1b'" onmouseout="this.style.background='#dc2626'">
+                ⏹️ Detener
+              </button>
+            ` : ''}
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Funciones de acción
+    function startNewDebate() {
+      console.log('🧠 Iniciando nuevo debate...');
+      // Aquí se abriría un modal para configurar nuevo debate
+    }
+
+    function viewActiveDebates() {
+      console.log('⚡ Ver debates activos...');
+      // Aquí se filtrarían solo los debates activos
+    }
+
+    function viewHistory() {
+      console.log('📋 Ver historial de debates...');
+      // Aquí se abriría la vista de historial completo
+    }
+
+    function exportResults() {
+      console.log('📤 Exportando resultados de debates...');
+      // Aquí se exportarían los resultados
+    }
+
+    function viewDebate(id) {
+      console.log('📊 Ver detalles del debate:', id);
+      // Aquí se abrirían los detalles del debate
+    }
+
+    function stopDebate(id) {
+      console.log('⏹️ Deteniendo debate:', id);
+      // Aquí se detendría el debate activo
+    }
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+      loadDebates();
+    });
+
+    // Actualizar datos cada 30 segundos
+    setInterval(() => {
+      loadDebates();
+    }, 30000);
+  </script>
+</body>
+</html>

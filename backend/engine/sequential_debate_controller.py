@@ -650,8 +650,8 @@ class SequentialDebateController:
                     if db_debate:
                         db_debate.status = "failed"
                         await db_session.commit()
-            except:
-                pass
+            except Exception as db_error:
+                logger.debug("sequential_debate.db_update_failed", error=str(db_error))
             logger.error("sequential_debate.failed",
                         session_id=session_id,
                         error=str(e))

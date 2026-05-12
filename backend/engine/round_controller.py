@@ -30,13 +30,17 @@ class RoundController:
     """
     
     # Configuración de agentes por fase (modelos disponibles en Worker)
+    # INCLUYE: Analista Contrarian para generar fricción y evitar consenso fácil
     ANALYSIS_AGENTS = [
         AgentConfig("analyst_local_a", "LOCAL", "ollama", "tinyllama:latest", "Analista Técnico", max_tokens=1000),
+        AgentConfig("analyst_contrarian", "LOCAL", "ollama", "tinyllama:latest", "Analista Contrarian (Disruptivo)", max_tokens=1000),
     ]
     
     # Cruce híbrido: crítico local examina análisis nube y viceversa
+    # INCLUYE: Crítico especial para el analista contrarian
     CRITIQUE_MAPPING = {
         "critic_local_a": ("analyst_local_a", "LOCAL", "ollama", "Crítico Técnico", "tinyllama:latest"),
+        "critic_contrarian": ("analyst_contrarian", "LOCAL", "ollama", "Crítico de Disrupción", "tinyllama:latest"),
     }
     
     SYNTHESIS_AGENTS = [
@@ -232,7 +236,7 @@ class RoundController:
     ) -> Dict[str, AgentResult]:
         """Fase 1: Ejecuta 4 analistas en paralelo"""
         
-        # Construir prompts
+        # Construir prompts con contexto evolutivo
         prompts = {}
         for config in self.ANALYSIS_AGENTS:
             system_prompt = ""  # El prompt del rol va en user_prompt para compatibilidad
@@ -241,7 +245,10 @@ class RoundController:
                 query=query,
                 role_label=config.role_label,
                 max_tokens=config.max_tokens,
-                context=previous_context
+                round_number=round_number,
+                iteration_context=f"Ronda {round_number} de análisis. " + (previous_context if previous_context else ""),
+                other_analyses_context="### Contexto de otros analistas:\nSe proporcionará en siguientes versiones.",
+                critiques_context="### Críticas previas:\nSe proporcionará en siguientes versiones."
             )
             prompts[config.slot] = (system_prompt, user_prompt)
         
