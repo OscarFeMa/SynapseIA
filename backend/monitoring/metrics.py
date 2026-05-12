@@ -201,12 +201,38 @@ class MetricsCollector:
     
     def get_metrics_summary(self) -> Dict[str, Any]:
         """Obtiene resumen de métricas actuales"""
-        return {
-            'debates_total': debates_total._value._value,
-            'active_debates': active_debates._value._value,
-            'connected_workers': connected_workers._value._value,
-            'uptime_seconds': time.time() - self.start_time
-        }
+        # Obtener valores de métricas de forma segura
+        import io
+        from prometheus_client import generate_latest
+        
+        try:
+            # Generar output de Prometheus y parsear
+            output = generate_latest(registry).decode('utf-8')
+            
+            # Parsear valores básicos
+            debates_total_val = 0
+            active_debates_val = 0
+            
+            for line in output.split('\n'):
+                if line.startswith('synapse_debates_total{'):
+                    debates_total_val += int(line.split()[-1]) if ' ' in line else 0
+                elif line.startswith('synapse_active_debates '):
+                    active_debates_val = float(line.split()[-1])
+            
+            return {
+                'debates_total': debates_total_val,
+                'active_debates': active_debates_val,
+                'connected_workers': connected_workers._value._value if hasattr(connected_workers, '_value') else 0,
+                'uptime_seconds': time.time() - self.start_time
+            }
+        except Exception:
+            # Fallback en caso de error
+            return {
+                'debates_total': 0,
+                'active_debates': 0,
+                'connected_workers': 0,
+                'uptime_seconds': time.time() - self.start_time
+            }
 
 
 # Singleton instance

@@ -5,6 +5,7 @@ Endpoints para métricas Prometheus y estado del sistema
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import PlainTextResponse, JSONResponse
 from typing import Dict, Any
+from datetime import datetime
 import structlog
 
 from backend.monitoring.metrics import get_metrics_collector, get_prometheus_metrics
@@ -36,7 +37,7 @@ async def get_metrics():
 async def get_system_status():
     """
     Estado completo del sistema
-    Incluye workers, caché, y métricas resumidas
+    Incluye workers, caché, métricas resumidas y alertas activas
     """
     try:
         # Obtener componentes
@@ -53,23 +54,73 @@ async def get_system_status():
         # Métricas resumidas
         metrics_summary = metrics_collector.get_metrics_summary()
         
+        # Alertas activas
+        from backend.monitoring.alerts import get_alert_manager
+        alert_manager = get_alert_manager()
+        active_alerts = [a.to_dict() for a in alert_manager.get_active_alerts()]
+        
         return {
             "status": "healthy",
-            "timestamp": logger.info("monitoring.status_requested"),
+            "timestamp": datetime.utcnow().isoformat(),
             "components": {
                 "workers": worker_status,
                 "cache": cache_status,
                 "metrics": metrics_summary
             },
+            "alerts": {
+                "active_count": len(active_alerts),
+                "active_alerts": active_alerts
+            },
             "health_checks": {
                 "workers_healthy": worker_status["healthy_workers"] > 0,
                 "cache_connected": cache_status.get("status") == "connected",
-                "metrics_available": True
+                "metrics_available": True,
+                "no_critical_alerts": not any(a["severity"] == "critical" for a in active_alerts)
             }
         }
     except Exception as e:
         logger.error("monitoring.status_error", error=str(e))
         raise HTTPException(status_code=500, detail="Failed to get system status")
+
+
+@router.get("/alerts", response_model=Dict[str, Any])
+async def get_active_alerts():
+    """Obtiene alertas activas del sistema"""
+    try:
+        from backend.monitoring.alerts import get_alert_manager
+        alert_manager = get_alert_manager()
+        
+        active_alerts = [a.to_dict() for a in alert_manager.get_active_alerts()]
+        history = [a.to_dict() for a in alert_manager.get_alert_history(limit=50)]
+        
+        return {
+            "active_count": len(active_alerts),
+            "active_alerts": active_alerts,
+            "recent_history": history
+        }
+    except Exception as e:
+        logger.error("monitoring.alerts_error", error=str(e))
+        raise HTTPException(status_code=500, detail="Failed to get alerts")
+
+
+@router.post("/alerts/{alert_id}/resolve")
+async def resolve_alert(alert_id: str):
+    """Resuelve manualmente una alerta"""
+    try:
+        from backend.monitoring.alerts import get_alert_manager
+        alert_manager = get_alert_manager()
+        
+        success = await alert_manager.resolve_alert(alert_id)
+        
+        if success:
+            return {"status": "resolved", "alert_id": alert_id}
+        else:
+            raise HTTPException(status_code=404, detail="Alert not found")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error("monitoring.resolve_alert_error", error=str(e))
+        raise HTTPException(status_code=500, detail="Failed to resolve alert")
 
 
 @router.get("/workers", response_model=Dict[str, Any])

@@ -6,6 +6,7 @@ from pydantic import Field, field_validator
 from typing import List, Optional, Union
 from functools import lru_cache
 import socket
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -36,7 +37,20 @@ class Settings(BaseSettings):
     TCP_COMMAND_PORT: int = 54322
     
     # ─── Seguridad ────────────────────────────────────────────
-    SYNAPSE_SECRET_TOKEN: str = Field(default="synapse_coral_2024")
+    SYNAPSE_SECRET_TOKEN: str = Field(default_factory=lambda: os.getenv("SYNAPSE_SECRET_TOKEN", "synapse_coral_2024"))
+    FORCE_TOKEN_CHANGE: bool = Field(default=False)  # Forzar cambio de token en producción
+    
+    @field_validator("SYNAPSE_SECRET_TOKEN", mode="after")
+    @classmethod
+    def validate_token(cls, v):
+        """Valida que el token no sea el default en producción"""
+        if v == "synapse_coral_2024" and os.getenv("ENVIRONMENT") == "production":
+            import warnings
+            warnings.warn(
+                "SYNAPSE_SECRET_TOKEN usa valor default en producción. "
+                "Cambia la variable de entorno SYNAPSE_SECRET_TOKEN inmediatamente."
+            )
+        return v
     
     # ─── Base de Datos ────────────────────────────────────────
     DATABASE_URL: str = "sqlite+aiosqlite:///./data/synapse.db"

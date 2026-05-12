@@ -124,12 +124,32 @@ class WorkerAutoStarter:
             # Comando para iniciar el backend del Worker
             # Asume que el Worker tiene el proyecto en D:\Synapse04_05_26
             ps_script = rf'''
+$ErrorActionPreference = "Stop"
 $proc = Get-Process python -ErrorAction SilentlyContinue | Where-Object {{$_.CommandLine -like "*backend.main*"}}
 if (-not $proc) {{
-    $env:NODE_ROLE = "WORKER"
-    $env:WORKER_HOST = "{worker_ip}"
-    Start-Process python -ArgumentList "-m","backend.main" -WorkingDirectory "D:\Synapse04_05_26" -WindowStyle Hidden
-    Write-Output "STARTED"
+    [Environment]::SetEnvironmentVariable("NODE_ROLE", "WORKER", "Machine")
+    [Environment]::SetEnvironmentVariable("WORKER_HOST", "{worker_ip}", "Machine")
+    
+    # Intentar múltiples rutas posibles
+    $paths = @(
+        "D:\Synapse04_05_26",
+        "C:\SynapseIA",
+        "$env:USERPROFILE\SynapseIA"
+    )
+    
+    $started = $false
+    foreach ($path in $paths) {{
+        if (Test-Path $path) {{
+            Start-Process python -ArgumentList "-m","backend.main" -WorkingDirectory $path -WindowStyle Hidden -ErrorAction SilentlyContinue
+            Write-Output "STARTED:$path"
+            $started = $true
+            break
+        }}
+    }}
+    
+    if (-not $started) {{
+        Write-Output "ERROR:No valid path found"
+    }}
 }} else {{
     Write-Output "ALREADY_RUNNING"
 }}

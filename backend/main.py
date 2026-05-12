@@ -30,31 +30,25 @@ from backend.api.routes.websockets import router as websockets_router
 from backend.api.routes.network import router as network_router
 from backend.api.routes.debate import router as debate_router
 from backend.api.routes.system import router as system_router
+from backend.api.routes.monitoring_dashboard import router as monitoring_router
 from backend.network.discovery import node_discoverer
 from backend.network.heartbeat import HeartbeatManager
 from backend.network.tcp_handshake import TCPHandshake
 
-# Configurar logging estructurado
-structlog.configure(
-    processors=[
-        structlog.stdlib.filter_by_level,
-        structlog.stdlib.add_logger_name,
-        structlog.stdlib.add_log_level,
-        structlog.stdlib.PositionalArgumentsFormatter(),
-        structlog.processors.TimeStamper(fmt="iso"),
-        structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info,
-        structlog.processors.UnicodeDecoder(),
-        structlog.dev.ConsoleRenderer()  # Cambiado de JSONRenderer para ver en consola
-    ],
-    context_class=dict,
-    logger_factory=structlog.stdlib.LoggerFactory(),
-    wrapper_class=structlog.stdlib.BoundLogger,
-    cache_logger_on_first_use=True,
-)
-
-logger = structlog.get_logger()
+# Obtener configuración primero
 settings = get_settings()
+
+# Configurar logging estructurado con JSON y trazabilidad
+from backend.monitoring.logging_config import setup_logging, get_logger
+setup_logging(
+    log_level=settings.LOG_LEVEL,
+    log_file="logs/synapse.log",
+    console_output=True
+)
+synapse_logger = get_logger()
+
+# Inicializar sistema de alertas proactivas
+from backend.monitoring.alerts import init_health_monitoring, shutdown_health_monitoring
 
 # Instancia global de heartbeat manager
 heartbeat_manager: HeartbeatManager = None
@@ -67,20 +61,20 @@ async def lifespan(app: FastAPI):
     global heartbeat_manager, tcp_handshake
     
     # Startup
-    logger.info("synapse_council.starting", version="2.0.0", node_role=settings.NODE_ROLE)
+    synapse_logger.info("synapse_council.starting", version="2.1.0", node_role=settings.NODE_ROLE)
     
     # Inicializar base de datos
     await init_db()
-    logger.info("database.initialized", url=settings.DATABASE_URL)
+    synapse_logger.info("database.initialized", url=settings.DATABASE_URL)
     
     # Iniciar memoria híbrida v2 (condicional)
     try:
         from backend.memory.hybrid_memory_v2 import get_hybrid_memory_v2
         hybrid_mem = get_hybrid_memory_v2()
         await hybrid_mem.start()
-        logger.info("hybrid_memory_v2.started")
+        synapse_logger.info("hybrid_memory_v2.started")
     except Exception as e:
-        logger.warning("hybrid_memory_v2.start_failed", error=str(e))
+        synapse_logger.warning("hybrid_memory_v2.start_failed", error=str(e))
     
     # Iniciar descubrimiento de red
     await node_discoverer.start()
@@ -96,7 +90,7 @@ async def lifespan(app: FastAPI):
             timeout=settings.HEARTBEAT_TIMEOUT
         )
         await heartbeat_manager.start()
-        logger.info("heartbeat.started", role="MASTER")
+        synapse_logger.info("heartbeat.started", role="MASTER")
     else:
         # Worker inicia heartbeat cuando conoce la IP del Master
         heartbeat_manager = HeartbeatManager(
@@ -104,7 +98,11 @@ async def lifespan(app: FastAPI):
             interval=settings.HEARTBEAT_INTERVAL,
             timeout=settings.HEARTBEAT_TIMEOUT
         )
-        logger.info("heartbeat.initialized", role="WORKER")
+        synapse_logger.info("heartbeat.initialized", role="WORKER")
+    
+    # Iniciar sistema de alertas proactivas y monitoreo de salud
+    await init_health_monitoring()
+    synapse_logger.info("health_monitoring.started")
     
     yield
     
@@ -114,29 +112,32 @@ async def lifespan(app: FastAPI):
     # Detener heartbeat
     if heartbeat_manager:
         await heartbeat_manager.stop()
-        logger.info("heartbeat.stopped")
+        synapse_logger.info("heartbeat.stopped")
     
     # Cerrar TCP handshake
     if tcp_handshake:
         tcp_handshake.close()
-        logger.info("tcp_handshake.closed")
+        synapse_logger.info("tcp_handshake.closed")
     
     # Detener memoria híbrida
     try:
         from backend.memory.hybrid_memory_v2 import get_hybrid_memory_v2
         hybrid_mem = get_hybrid_memory_v2()
         await hybrid_mem.stop()
-        logger.info("hybrid_memory_v2.stopped")
+        synapse_logger.info("hybrid_memory_v2.stopped")
     except Exception as e:
-        logger.warning("hybrid_memory_v2.stop_failed", error=str(e))
+        synapse_logger.warning("hybrid_memory_v2.stop_failed", error=str(e))
     
-    logger.info("synapse_council.stopping")
+    # Detener sistema de monitoreo de salud
+    await shutdown_health_monitoring()
+    
+    synapse_logger.info("synapse_council.stopping")
 
 
 app = FastAPI(
-    title="Synapse Council v2.0",
-    description="Plataforma de razonamiento colectivo híbrido con Tribunal de Magistrados",
-    version="2.0.0",
+    title="Synapse Council v2.1",
+    description="Plataforma de razonamiento colectivo híbrido con Tribunal de Magistrados - Con observabilidad mejorada",
+    version="2.1.0",
     lifespan=lifespan,
 )
 
@@ -169,22 +170,25 @@ app.include_router(websockets_router)
 app.include_router(network_router)
 app.include_router(debate_router, prefix="/api/v1")
 app.include_router(system_router, prefix="/api/v1")
+app.include_router(monitoring_router)  # Dashboard de monitoreo
 
 # Debug router (importación local para evitar imports circulares)
 from backend.api.routes.debug import router as debug_router
 app.include_router(debug_router)
-logger.info("debug_router.enabled")
+synapse_logger.info("debug_router.enabled")
 
 @app.get("/")
 async def root():
     """Endpoint raíz con información del sistema"""
     return {
         "name": "Synapse Council",
-        "version": "2.0.0",
+        "version": "2.1.0",
         "description": "Plataforma de razonamiento colectivo híbrido",
         "node_role": settings.NODE_ROLE,
         "docs": "/docs",
-        "health": "/health"
+        "health": "/health",
+        "dashboard": "/api/monitoring/dashboard",
+        "metrics": "/api/monitoring/metrics/prometheus"
     }
 
 

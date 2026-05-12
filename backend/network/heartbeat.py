@@ -30,6 +30,12 @@ class HeartbeatManager:
         self.peer_ip: Optional[str] = None
         self.on_heartbeat_received: Optional[Callable] = None
         self.on_connection_lost: Optional[Callable] = None
+        # Mejoras de robustez
+        self._reconnect_attempts = 0
+        self._max_reconnect_attempts = 5
+        self._consecutive_failures = 0
+        self._max_consecutive_failures = 3
+        self._health_score = 100.0  # Score de salud de la conexión (0-100)
         
     async def start(self, peer_ip: Optional[str] = None):
         """Inicia el sistema de heartbeat de forma async."""
@@ -75,37 +81,61 @@ class HeartbeatManager:
             try:
                 if not self._writer:
                     try:
+                        # Backoff exponencial para reconexión
+                        backoff = min(2 ** self._reconnect_attempts, 30)
                         self._reader, self._writer = await asyncio.wait_for(
                             asyncio.open_connection(self.peer_ip, 54322),
                             timeout=5.0
                         )
                         logger.info("heartbeat.tcp_connected", peer_ip=self.peer_ip)
+                        self._reconnect_attempts = 0  # Resetear tras éxito
+                        self._health_score = min(100.0, self._health_score + 10)
                     except asyncio.TimeoutError:
-                        logger.warning("heartbeat.tcp_connect_timeout", peer_ip=self.peer_ip)
-                        await asyncio.sleep(self.interval)
+                        logger.warning("heartbeat.tcp_connect_timeout", peer_ip=self.peer_ip, attempt=self._reconnect_attempts)
+                        self._reconnect_attempts += 1
+                        self._health_score = max(0.0, self._health_score - 5)
+                        if self._reconnect_attempts >= self._max_reconnect_attempts:
+                            logger.error("heartbeat.max_reconnect_attempts_reached", peer_ip=self.peer_ip)
+                            if self.on_connection_lost:
+                                await self.on_connection_lost()
+                            break
+                        await asyncio.sleep(backoff)
                         continue
                     except Exception as e:
-                        logger.error("heartbeat.tcp_connect_error", error=str(e))
+                        logger.error("heartbeat.tcp_connect_error", peer_ip=self.peer_ip, error=str(e))
+                        self._reconnect_attempts += 1
+                        self._health_score = max(0.0, self._health_score - 5)
                         await asyncio.sleep(self.interval)
                         continue
                 
                 heartbeat_msg = {
                     'type': 'HEARTBEAT',
                     'timestamp': datetime.now().isoformat(),
-                    'role': 'WORKER'
+                    'role': 'WORKER',
+                    'health_score': self._health_score,
+                    'token': settings.SYNAPSE_SECRET_TOKEN  # Token de autenticación
                 }
                 
                 data = json.dumps(heartbeat_msg).encode('utf-8')
                 self._writer.write(data)
                 await self._writer.drain()
-                logger.debug("heartbeat.sent")
+                logger.debug("heartbeat.sent", health_score=self._health_score)
                 
+                self._consecutive_failures = 0  # Resetear fallos tras envío exitoso
                 await asyncio.sleep(self.interval)
                 
             except Exception as e:
-                logger.error("heartbeat.send_error", error=str(e))
+                logger.error("heartbeat.send_error", peer_ip=self.peer_ip, error=str(e))
                 self._reader = None
                 self._writer = None
+                self._consecutive_failures += 1
+                self._health_score = max(0.0, self._health_score - 10)
+                
+                if self._consecutive_failures >= self._max_consecutive_failures:
+                    logger.warning("heartbeat.consecutive_failures_exceeded", failures=self._consecutive_failures)
+                    if self.on_connection_lost:
+                        await self.on_connection_lost()
+                
                 await asyncio.sleep(self.interval)
     
     async def _listen_heartbeats(self):
@@ -130,9 +160,45 @@ class HeartbeatManager:
             logger.error("heartbeat.listen_error", error=str(e))
     
     async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        """Maneja una conexión de heartbeat entrante (Master)."""
+        """Maneja una conexión de heartbeat entrante (Master) con autenticación."""
         peer_ip = writer.get_extra_info('peername')[0]
         logger.info("heartbeat.client_connected", peer_ip=peer_ip)
+        
+        # Autenticación inicial - esperar handshake con token
+        try:
+            initial_data = await asyncio.wait_for(reader.read(4096), timeout=10.0)
+            if not initial_data:
+                logger.warning("heartbeat.no_initial_data", peer_ip=peer_ip)
+                writer.close()
+                await writer.wait_closed()
+                return
+            
+            message = json.loads(initial_data.decode('utf-8'))
+            
+            # Validar token de seguridad
+            if message.get('type') == 'HEARTBEAT':
+                received_token = message.get('token')
+                if received_token and received_token != settings.SYNAPSE_SECRET_TOKEN:
+                    logger.warning("heartbeat.auth_failed", peer_ip=peer_ip)
+                    writer.close()
+                    await writer.wait_closed()
+                    return
+            else:
+                logger.warning("heartbeat.invalid_initial_message", peer_ip=peer_ip)
+                writer.close()
+                await writer.wait_closed()
+                return
+                
+        except asyncio.TimeoutError:
+            logger.warning("heartbeat.auth_timeout", peer_ip=peer_ip)
+            writer.close()
+            await writer.wait_closed()
+            return
+        except json.JSONDecodeError:
+            logger.warning("heartbeat.invalid_json", peer_ip=peer_ip)
+            writer.close()
+            await writer.wait_closed()
+            return
         
         try:
             while self.running:
@@ -151,7 +217,9 @@ class HeartbeatManager:
                         if message.get('type') == 'HEARTBEAT':
                             self.last_heartbeat = datetime.now()
                             self.peer_ip = peer_ip
-                            logger.debug("heartbeat.received", peer_ip=peer_ip)
+                            # Actualizar health score basado en datos del heartbeat
+                            health_score = message.get('health_score', 100.0)
+                            logger.debug("heartbeat.received", peer_ip=peer_ip, health_score=health_score)
                             
                             if self.on_heartbeat_received:
                                 await self.on_heartbeat_received(peer_ip)
@@ -174,7 +242,7 @@ class HeartbeatManager:
             logger.info("heartbeat.client_disconnected", peer_ip=peer_ip)
     
     async def _monitor_timeout(self):
-        """Monitorea timeout de heartbeat y notifica desconexiones."""
+        """Monitorea timeout de heartbeat y notifica desconexiones con health score."""
         while self.running:
             try:
                 await asyncio.sleep(self.interval)
@@ -182,21 +250,31 @@ class HeartbeatManager:
                 if self.last_heartbeat:
                     elapsed = (datetime.now() - self.last_heartbeat).total_seconds()
                     if elapsed > self.timeout:
-                        logger.warning("heartbeat.timeout", elapsed=elapsed, timeout=self.timeout)
+                        # Degradar health score gradualmente
+                        self._health_score = max(0.0, self._health_score - 15)
+                        logger.warning("heartbeat.timeout", elapsed=elapsed, timeout=self.timeout, health_score=self._health_score)
                         if self.on_connection_lost:
                             await self.on_connection_lost()
+                    else:
+                        # Recuperación gradual si hay heartbeat reciente
+                        if self._health_score < 100.0:
+                            self._health_score = min(100.0, self._health_score + 2)
             except asyncio.CancelledError:
                 break
             except Exception as e:
                 logger.error("heartbeat.monitor_error", error=str(e))
     
+    def get_health_score(self) -> float:
+        """Retorna el health score actual de la conexión (0-100)."""
+        return self._health_score
+    
     def is_alive(self) -> bool:
-        """Verifica si el peer está vivo basado en heartbeat."""
+        """Verifica si el peer está vivo basado en heartbeat y health score."""
         if not self.last_heartbeat:
             return False
         
         elapsed = (datetime.now() - self.last_heartbeat).total_seconds()
-        return elapsed < self.timeout
+        return elapsed < self.timeout and self._health_score > 50.0
     
     def get_last_heartbeat_time(self) -> Optional[datetime]:
         """Retorna el timestamp del último heartbeat."""
