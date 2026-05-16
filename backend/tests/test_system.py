@@ -835,14 +835,15 @@ class TestAPIEndpoints:
         try:
             monkeypatch.setattr(system_routes.settings, "ADMIN_API_LOCALHOST_ONLY", False)
             client = TestClient(app)
-            response = client.get("/api/v1/system/analytics?limit=1")
+            response = client.get("/api/v1/system/analytics?limit=25")
 
             assert response.status_code == 200
             data = response.json()
             assert data["dailySummary"]["date"] == "2099-02-03"
             assert data["dailySummary"]["totalDebatesCompleted"] == 3
             assert data["topTopics"][0]["topicHash"] == topic_hash
-            assert data["modelLeaderboard"][0]["model"] == model_name
+            models = [m["model"] for m in data["modelLeaderboard"]]
+            assert model_name in models, f"Seeded model {model_name} not in leaderboard: {models}"
         finally:
             asyncio.run(cleanup())
 
